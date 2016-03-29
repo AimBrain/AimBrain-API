@@ -1,0 +1,928 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #151515;
+  background-color: #ac4142;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #505050;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #d0d0d0;
+}
+.highlight .p, .highlight .pi {
+  color: #d0d0d0;
+}
+.highlight .gi {
+  color: #90a959;
+}
+.highlight .gd {
+  color: #ac4142;
+}
+.highlight .gh {
+  color: #6a9fb5;
+  background-color: #151515;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #aa759f;
+}
+.highlight .kc {
+  color: #d28445;
+}
+.highlight .kt {
+  color: #d28445;
+}
+.highlight .kd {
+  color: #d28445;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #90a959;
+}
+.highlight .sr {
+  color: #75b5aa;
+}
+.highlight .si {
+  color: #8f5536;
+}
+.highlight .se {
+  color: #8f5536;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #6a9fb5;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #90a959;
+}
+.highlight .ss {
+  color: #90a959;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a target="_blank" href='https://aimbrain.com'>Homepage</a></li>
+            <li><a target="_blank" href='https://github.com/aimbrain/aimbrain-android-sdk'>Android SDK</a></li>
+            <li><a target="_blank" href='https://github.com/aimbrain/aimbrain-ios-sdk'>iOS SDK</a></li>
+            <li><a target="_blank" href='https://github.com/aimbrain/aimbrain-android-banking-demo'>Android Reference Implementation</a></li>
+            <li><a target="_blank" href='https://github.com/aimbrain/aimbrain-ios-banking-demo'>iOS Reference Implementation</a></li>
+            <li><a target="_blank" href='https://aimbrain.com/demos'>Demo Apps</a></li>
+            <li><a target="_blank" href='mailto://team@aimbrain.com'>Contact Us</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="introduction">Introduction</h1>
+
+<p>Welcome to the AimBrain&rsquo;s API spec.</p>
+
+<p><strong>Current API Version:</strong> <a href="#api-v1">API v1</a></p>
+
+<aside class="notice">
+The AimBrain API is under active development. Breaking changes should be expected.
+</aside>
+
+          <h1 id="modules">Modules</h1>
+
+<p>AimBrain supports multiple biometric modalities (modules) as part of its authentication platform. These modules can be used together (e.g. to step-up the authentication on high risk actions) or separately, depending on the specific use-case. Because AimBrain offers a public API, any module can be used in a cross-channel context (e.g. same Voice Module with mobile banking application and customer call center).</p>
+
+<p><img alt="AimBrain Modules" src="images/modules.png" /></p>
+
+<h2 id="behavioural">Behavioural</h2>
+
+<p>With the behavioural modality AimBrain uses machine learning to track not <em>what</em> the user enters, but <em>how</em> they enter it.  AimBrain monitors features such as touch pressure, typing speed, as well as movement.</p>
+
+<aside class="notice">
+Behavioural Module is trained on (user id, device) tuple.
+</aside>
+
+<h2 id="facial">Facial</h2>
+
+<aside class="notice">
+Facial Module is trained per user id.
+</aside>
+
+<h2 id="voice">Voice</h2>
+
+<aside class="notice">
+Currently in testing with alpha customers.
+</aside>
+
+          <h1 id="api-v1">API v1</h1>
+
+<p>All API requests use POST verb to prevent caching issues and request length limitations. Requests are passed in JSON format in the HTTP request body and MUST include the following header (alongside valid authentication headers):</p>
+
+<p><code class="prettyprint">Content-Type: application/json</code></p>
+
+<p><strong>Production Base URL:</strong> <code class="prettyprint">https://api.aimbrain.com/</code></p>
+
+<aside class="notice">
+HTTPS is required. AimBrain only responds to encrypted traffic so that your data remains safe.
+</aside>
+
+<h2 id="authentication">Authentication</h2>
+
+<blockquote>
+<p>To generate and run curl request using curl_hmac.py tool:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/sessions<span class="se">\</span>
+    <span class="s1">'{"userId": "user", "device":"device", "system":"system"}'</span>
+</code></pre>
+
+<blockquote>
+<p>and to read request body from file:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/sessions <span class="se">\</span>
+    -f <span class="s2">"request_example_body.json"</span>
+</code></pre>
+
+<blockquote>
+<p>Example output:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl https://api.aimbrain.com:443/v1/sessions<span class="se">\</span>
+    -H <span class="s1">'Content-Type: application/json'</span><span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-apikey: test'</span><span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-signature: uPVe74VR9ncmxltwNX69pe6amFTMbJGM0Y8dIGk8vSI='</span><span class="se">\</span>
+    -d <span class="s1">'{"userId": "user", "device":"device", "system":"system"}'</span>
+</code></pre>
+
+<p>AimBrain uses API key pairs (API key and API secret) to allow access to the API. You can register a new API key by <a href="mailto:team@aimbrain.com">emailing us</a>.</p>
+
+<p>AimBrain expects for the API key and HMAC Signature to be included in all API requests to the server in the HTTP headers that look like the following:</p>
+
+<p><code class="prettyprint">X-aimbrain-apikey: api-key</code><br>
+<code class="prettyprint">X-aimbrain-signature: base64-hmac-signature</code></p>
+
+<p>To make development, testing and debugging easier we provide a <a href="https://github.com/aimbrain/aimbrain-utils/blob/master/curl_hmac.py">python tool for generating correctly signed and formed curl requests</a>, as shown in the example.</p>
+
+<aside class="notice">
+Remember - in the examples you must replace <code>test</code> with your personal API Key and <code>secret</code> with your personal API Secret.
+</aside>
+
+<aside class="warning">
+You MUST never share the API Secret parameter with other people. If it happened unintentionally please generate a new API key pair via dashboard and disable the old one.
+</aside>
+
+<h3 id="generating-x-aimbrain-signature">Generating X-aimbrain-signature</h3>
+
+<p>Use base64 encoded HMAC SHA256 digest as the request signature:</p>
+
+<p><code class="prettyprint">X-aimbrain-signature = base64(HMAC_SHA256(secret, message))</code>, where</p>
+
+<p><code class="prettyprint">secret</code> is your API Secret, and</p>
+
+<p><code class="prettyprint">message = uppercase_http_method + &#39;\n&#39; + lovercase_endpoint + &#39;\n&#39; + request_body</code>.</p>
+
+<h2 id="v1-sessions">/v1/sessions</h2>
+
+<blockquote>
+<p>Download <a href="examples/api_v1/session_request_example_body.json">session_request_example_body.json</a> and use:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/sessions <span class="se">\</span>
+    -f <span class="s1">'session_request_example_body.json'</span> -r
+</code></pre>
+
+<blockquote>
+<p>Alternatively:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl https://api.aimbrain.com:443/v1/sessions <span class="se">\</span>
+    -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-apikey: test'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-signature: E7vPXCNHsJQhadkTruAbCE+q9fCmRK9Gf+wtl2/3yrA='</span> <span class="se">\</span>
+    --data @session_request_example_body.json
+</code></pre>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"behaviour"</span>:0,
+    <span class="s2">"face"</span>:0,
+    <span class="s2">"session"</span>:<span class="s2">"test-user-test-user-1234567890-1459141412877914289"</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>This endpoint creates a server-side session and returns unique session id to be used with further API requests.</p>
+
+<aside class="notice">
+Session ID will automatically expire after 24 hours of the last API request associated with that session.
+</aside>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /v1/sessions</code></p>
+
+<h3 id="body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">userId</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Random anonymous static ID used to identify app users.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">device</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>User&rsquo;s device name used in the Behavioural Module and to calculate the precise accuracy by only testing between users with the same device.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">system</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Operating system&rsquo;s name and version used for tracking SDK’s usage statistics.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">screenHeight</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>User&rsquo;s device screen height (px).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">screenWidth</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>User&rsquo;s device screen width (px).</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">session</code></td>
+<td><strong>string</strong><br>Generated session id for use with other API requests to maintain session semantics.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">face</code></td>
+<td><strong>integer</strong><br>Status of the Facial Module for given user (see below).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">behaviour</code></td>
+<td><strong>integer</strong><br>Status of the Facial Module for given user and device pair (see below).</td>
+</tr>
+</tbody></table>
+
+<h3 id="face-parameter-values"><code class="prettyprint">face</code> parameter values:</h3>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">0</code></td>
+<td>User not enrolled - facial authentication not available, enrollment required.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">1</code></td>
+<td>User enrolled - facial authentication available.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">2</code></td>
+<td>Building template - enrollment done, AimBrain is building user template and no further action is required.</td>
+</tr>
+</tbody></table>
+
+<h3 id="behaviour-parameter-values"><code class="prettyprint">behaviour</code> parameter values:</h3>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">0</code></td>
+<td>User not enrolled - behavioural authentication not available, enrollment required.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">1</code></td>
+<td>User enrolled - behavioural authentication available.</td>
+</tr>
+</tbody></table>
+
+<h3 id="custom-errors">Custom Errors</h3>
+
+<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+
+<h2 id="v1-behavioural">/v1/behavioural</h2>
+
+<blockquote>
+<p>Download <a href="examples/api_v1/behavioural_request_example_body.json">behavioural_request_example_body.json</a> and use:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/behavioural <span class="se">\</span>
+    -f <span class="s1">'behavioural_request_example_body.json'</span> -r
+</code></pre>
+
+<blockquote>
+<p>Alternatively:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl https://api.aimbrain.com:443/v1/behavioural <span class="se">\</span>
+    -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-apikey: test'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-signature: TgDm+IwKlW3H3ILdB3ga0OOZGgZab4gM/9nW+X4NSHw='</span> <span class="se">\</span>
+    --data @behavioural_request_example_body.json
+</code></pre>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"status"</span>:0,
+    <span class="s2">"score"</span>:0
+<span class="o">}</span>
+</code></pre>
+
+<p>This endpoint enrolls and authenticates users based on the Behavioural Module.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /v1/behavioural</code></p>
+
+<h3 id="body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">session</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Current Session ID as returned by <a href="#v1-sessions">/v1/sessions</a> request.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">touches</code><br><span class="label notice">required</span></td>
+<td><strong>array of objects</strong><br>List of touch events (see below).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">accelerations</code><br><span class="label notice">required</span></td>
+<td><strong>array of objects</strong><br>List of accelerometer events (see below).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">textEvents</code><br><span class="label notice">required</span></td>
+<td><strong>array of objects</strong><br>List of text change / typing events (see below).</td>
+</tr>
+</tbody></table>
+
+<h3 id="touches-object"><code class="prettyprint">touches</code> object:</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">tid</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>Touch id as reported by the system (e.g. <a href="https://developer.android.com/reference/android/view/MotionEvent.html#getPointerId(int)">MotionEvent.getPointerId(int)</a>) for Android</td>
+</tr>
+<tr>
+<td><code class="prettyprint">p</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>Phase or action for the touch event, where: <code class="prettyprint">0</code> - Began, <code class="prettyprint">1</code> - Moved, <code class="prettyprint">2</code> - Stationary, <code class="prettyprint">3</code> - Ended, <code class="prettyprint">4</code> - Cancelled.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">t</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>The the time (in ms) when this specific event was generated.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">x</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>Absolute X coordinate for the touch position (for elements tagged as sensitive MUST be reported as “0”).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">y</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>Absolute X coordinate for the touch position (for elements tagged as sensitive MUST be reported as “0”).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">rx</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>Relative X coordinate to the event element (e.g. button).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">ry</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>Relative Y coordinate to the event element (e.g. button).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">r</code><br><span class="label notice">required</span></td>
+<td><strong>float</strong><br>Approximate size of touch area for the given touch id.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">f</code><br><span class="label notice">required</span></td>
+<td><strong>float</strong><br>Force of pressure of touch for the given event.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">ids</code><br><span class="label notice">required</span></td>
+<td><strong>array of strings</strong><br>List of identifiers of views in the order that touch event is propagating (for elements tagged as sensitive it MUST be reported as a hash of element id + locally generated salt which never leaves the user’s device).</td>
+</tr>
+</tbody></table>
+
+<h3 id="accelerations-object"><code class="prettyprint">accelerations</code> object:</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">t</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>The the time (in ms) when this specific event was generated.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">x</code><br><span class="label notice">required</span></td>
+<td><strong>float</strong><br>Acceleration in X direction.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">y</code><br><span class="label notice">required</span></td>
+<td><strong>float</strong><br>Acceleration in Y direction.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">z</code><br><span class="label notice">required</span></td>
+<td><strong>float</strong><br>Acceleration in Z direction.</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+Accelerometer readings MUST be sampled at around 100Hz frequency and for at least 500ms after the last observed touch event.
+</aside>
+
+<h3 id="textevents-object"><code class="prettyprint">textEvents</code> object:</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">t</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>The the time (in ms) when this specific event was generated.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">tx</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Full text after the event / change.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">ids</code><br><span class="label notice">required</span></td>
+<td><strong>array of strings</strong><br>List of identifiers of views in the order that touch event is propagating (for elements tagged as sensitive it MUST be reported as a hash of element id + locally generated salt which never leaves the user’s device).</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">score</code></td>
+<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the current user is the original / enrolled user (only if the current user is already enrolled).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">status</code></td>
+<td><strong>integer</strong><br>Status of the Behavioural Module for given user (see below).</td>
+</tr>
+</tbody></table>
+
+<h3 id="status-parameter-values"><code class="prettyprint">status</code> parameter values:</h3>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">0</code></td>
+<td>User not enrolled - behavioural authentication not available, enrollment required.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">1</code></td>
+<td>User enrolled - behavioural authentication available.</td>
+</tr>
+</tbody></table>
+
+<h3 id="custom-errors">Custom Errors</h3>
+
+<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+
+<h2 id="v1-face-enroll">/v1/face/enroll</h2>
+
+<blockquote>
+<p>Download <a href="examples/api_v1/face_enroll_request_example_body.json">face_enroll_request_example_body.json</a> and use:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/face/enroll <span class="se">\</span>
+    -f <span class="s1">'face_enroll_request_example_body.json'</span> -r
+</code></pre>
+
+<blockquote>
+<p>Alternatively:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl https://api.aimbrain.com:443/v1/face/enroll <span class="se">\</span>
+    -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-apikey: test'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-signature: VXNfJLbOntEVUlOp6UUwo8D4YyKjNtzspeBCOqZYM9A='</span> <span class="se">\</span>
+    --data @face_enroll_request_example_body.json
+</code></pre>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"imagesCount"</span>:2
+<span class="o">}</span>
+</code></pre>
+
+<p>This endpoint enrolls users based on the Facial Module.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /v1/face/enroll</code></p>
+
+<h3 id="body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">session</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Current Session ID as returned by <a href="#v1-sessions">/v1/sessions</a> request.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">faces</code><br><span class="label notice">required</span></td>
+<td><strong>array of strings</strong><br>List of base64 encoded images containing user face. JPEG and PNG formats supported.</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">imagesCount</code></td>
+<td><strong>integer</strong><br>Number of images accepted for enrollment.</td>
+</tr>
+</tbody></table>
+
+<h3 id="custom-errors">Custom Errors</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Action</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>422</td>
+<td>Well formed request received, but images were not accepted (reason specified in <code class="prettyprint">error</code> field)</td>
+<td>Capture a NEW set of images and try again</td>
+</tr>
+</tbody></table>
+
+<p>Please also see <a href="#errors">#errors</a> for description of standard errors.</p>
+
+<h2 id="v1-face-auth">/v1/face/auth</h2>
+
+<blockquote>
+<p>Download <a href="examples/api_v1/face_auth_request_example_body.json">face_auth_request_example_body.json</a> and use:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/face/auth <span class="se">\</span>
+    -f <span class="s1">'face_auth_request_example_body.json'</span> -r
+</code></pre>
+
+<blockquote>
+<p>Alternatively:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl https://api.aimbrain.com:443/v1/face/auth <span class="se">\</span>
+    -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-apikey: test'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-signature: dBxk9M++dNhI7pk+tXvAVaUwlWuOPl8S4wlmrhKhSqs='</span> <span class="se">\</span>
+    --data @face_auth_request_example_body.json
+</code></pre>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"score"</span>:0.95256084,
+    <span class="s2">"liveliness"</span>:0.05330102
+<span class="o">}</span>
+</code></pre>
+
+<p>This endpoint authenticates users based on the Facial Module.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /v1/face/auth</code></p>
+
+<h3 id="body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">session</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Current Session ID as returned by <a href="#v1-sessions">/v1/sessions</a> request.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">faces</code><br><span class="label notice">required</span></td>
+<td><strong>array of strings</strong><br>List of base64 encoded images containing user face. JPEG and PNG formats supported.</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">score</code></td>
+<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the current user is the original / enrolled user.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">liveliness</code></td>
+<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the received set of images represent a live person as opposed being still images.</td>
+</tr>
+</tbody></table>
+
+<h3 id="custom-errors">Custom Errors</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Action</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>422</td>
+<td>Well formed request received, but images were not accepted (reason specified in <code class="prettyprint">error</code> field)</td>
+<td>Capture a NEW set of images and try again</td>
+</tr>
+<tr>
+<td>424</td>
+<td>Well formed request received, but we could not find an enrolled user with the supplied id</td>
+<td>Confirm if enrollnment was done for the specific user</td>
+</tr>
+</tbody></table>
+
+<p>Please also see <a href="#errors">#errors</a> for description of standard errors.</p>
+
+<h2 id="v1-face-compare">/v1/face/compare</h2>
+
+<blockquote>
+<p>Download <a href="examples/api_v1/face_comapre_request_example_body.json">face_compare_request_example_body.json</a> and use:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/face/compare <span class="se">\</span>
+    -f <span class="s1">'face_compare_request_example_body.json'</span> -r
+</code></pre>
+
+<blockquote>
+<p>Alternatively:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl https://api.aimbrain.com:443/v1/face/compare <span class="se">\</span>
+    -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-apikey: test'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-signature: NwMmSbjqwsq7Y4x4Src7qHnIFerMhUTWcFxqLuAbbwg='</span> <span class="se">\</span>
+    --data @face_compare_request_example_body.json
+</code></pre>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"score"</span>:0.95256084,
+    <span class="s2">"liveliness1"</span>:0.05330102,
+    <span class="s2">"liveliness2"</span>:0.81412222
+<span class="o">}</span>
+</code></pre>
+
+<p>This endpoint compares two faces based on the Facial Module.</p>
+
+<aside class="notice">
+No images are stored server-side for this request.
+</aside>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /v1/face/compare</code></p>
+
+<h3 id="body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">faces1</code><br><span class="label notice">required</span></td>
+<td><strong>array of strings</strong><br>List of base64 encoded images containing user face. JPEG and PNG formats supported.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">faces2</code><br><span class="label notice">required</span></td>
+<td><strong>array of strings</strong><br>List of base64 encoded images containing user face. JPEG and PNG formats supported.</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">score</code></td>
+<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the current user is the original / enrolled user.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">liveliness1</code></td>
+<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the received set of images in <code class="prettyprint">faces1</code> array represent a live person as opposed being still images.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">liveliness2</code></td>
+<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the received set of images in <code class="prettyprint">faces2</code> array represent a live person as opposed being still images.</td>
+</tr>
+</tbody></table>
+
+<h3 id="custom-errors">Custom Errors</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Action</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>422</td>
+<td>Well formed request received, but images were not accepted (reason specified in <code class="prettyprint">error</code> field)</td>
+<td>Capture a NEW set of images and try again</td>
+</tr>
+</tbody></table>
+
+<p>Please also see <a href="#errors">#errors</a> for description of standard errors.</p>
+
+<h2 id="errors">Errors</h2>
+
+<blockquote>
+<p>Example error:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"error"</span>:<span class="s2">"Unable to detect face in target image"</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>All errors are indicated by returning HTTP code which is NOT 200. Human readable description is returned via body in JSON format.</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">error</code></td>
+<td><strong>string</strong><br>Human readable error description.</td>
+</tr>
+</tbody></table>
+
+<p>The AimBrain API uses the following error codes:</p>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Action</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request &ndash; malformed request received (e.g. missing API key, API signature, required parameters or malformed json)</td>
+<td>Inspect the error message and fix any errors</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; your API key or API signature is invalid</td>
+<td>Check implementation and try generating a new key pair via dashboard</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden &ndash; specified session with the id could not be found</td>
+<td>Generate and include a valid session id and try again</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error &ndash; well formed request received, but we had a problem with our server</td>
+<td>Try again later</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
