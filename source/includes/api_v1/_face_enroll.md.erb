@@ -1,0 +1,53 @@
+## /v1/face/enroll
+
+> Download [face_enroll_request_example_body.json](examples/api_v1/face_enroll_request_example_body.json) and use:
+
+```shell
+python2 curl_hmac.py test secret POST /v1/face/enroll \
+    -f 'face_enroll_request_example_body.json' -r
+```
+
+> Alternatively:
+
+```shell
+curl https://api.aimbrain.com:443/v1/face/enroll \
+    -H 'Content-Type: application/json' \
+    -H 'X-aimbrain-apikey: test' \
+    -H 'X-aimbrain-signature: VXNfJLbOntEVUlOp6UUwo8D4YyKjNtzspeBCOqZYM9A=' \
+    --data @face_enroll_request_example_body.json
+```
+
+> Example response:
+
+```shell
+{
+    "imagesCount":2
+}
+```
+
+This endpoint enrolls users based on the Facial Module.
+
+### HTTP Request
+`POST /v1/face/enroll`
+
+### Body
+
+Parameter | Description
+------------------------------|--------------------------------------
+`session`<br><span class="label notice">required</span>|**string**<br>Current Session ID as returned by [/v1/sessions](#v1-sessions) request.
+`faces`<br><span class="label notice">required</span>|**array of strings**<br>List of base64 encoded images containing user face. JPEG and PNG formats supported.
+
+### HTTP Response
+Status code: `200 OK`
+
+Parameter | Description
+------------------------------|--------------------------------------
+`imagesCount`|**integer**<br>Number of images accepted for enrollment.
+
+### Custom Errors
+
+Code | Meaning | Action
+---------- | ---------- | ----------
+422 | Well formed request received, but images were not accepted (reason specified in `error` field) | Capture a NEW set of images and try again
+
+Please also see [#errors](#errors) for description of standard errors.

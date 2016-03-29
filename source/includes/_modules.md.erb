@@ -1,0 +1,25 @@
+# Modules
+
+AimBrain supports multiple biometric modalities (modules) as part of its authentication platform. These modules can be used together (e.g. to step-up the authentication on high risk actions) or separately, depending on the specific use-case. Because AimBrain offers a public API, any module can be used in a cross-channel context (e.g. same Voice Module with mobile banking application and customer call center).
+
+![AimBrain Modules](images/modules.png)
+
+## Behavioural
+
+With the behavioural modality AimBrain uses machine learning to track not *what* the user enters, but *how* they enter it.  AimBrain monitors features such as touch pressure, typing speed, as well as movement.
+
+<aside class="notice">
+Behavioural Module is trained on (user id, device) tuple.
+</aside>
+
+## Facial
+
+<aside class="notice">
+Facial Module is trained per user id.
+</aside>
+
+## Voice
+
+<aside class="notice">
+Currently in testing with alpha customers.
+</aside>

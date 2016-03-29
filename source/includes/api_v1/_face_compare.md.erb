@@ -1,0 +1,62 @@
+## /v1/face/compare
+
+> Download [face_compare_request_example_body.json](examples/api_v1/face_comapre_request_example_body.json) and use:
+
+```shell
+python2 curl_hmac.py test secret POST /v1/face/compare \
+    -f 'face_compare_request_example_body.json' -r
+```
+
+> Alternatively:
+
+```shell
+curl https://api.aimbrain.com:443/v1/face/compare \
+    -H 'Content-Type: application/json' \
+    -H 'X-aimbrain-apikey: test' \
+    -H 'X-aimbrain-signature: NwMmSbjqwsq7Y4x4Src7qHnIFerMhUTWcFxqLuAbbwg=' \
+    --data @face_compare_request_example_body.json
+```
+
+> Example response:
+
+```shell
+{
+    "score":0.95256084,
+    "liveliness1":0.05330102,
+    "liveliness2":0.81412222
+}
+```
+
+This endpoint compares two faces based on the Facial Module.
+
+<aside class="notice">
+No images are stored server-side for this request.
+</aside>
+
+
+### HTTP Request
+`POST /v1/face/compare`
+
+### Body
+
+Parameter | Description
+------------------------------|--------------------------------------
+`faces1`<br><span class="label notice">required</span>|**array of strings**<br>List of base64 encoded images containing user face. JPEG and PNG formats supported.
+`faces2`<br><span class="label notice">required</span>|**array of strings**<br>List of base64 encoded images containing user face. JPEG and PNG formats supported.
+
+### HTTP Response
+Status code: `200 OK`
+
+Parameter | Description
+------------------------------|--------------------------------------
+`score`|**float**<br>Probability, expressed as float between (0..1), that the current user is the original / enrolled user.
+`liveliness1`|**float**<br>Probability, expressed as float between (0..1), that the received set of images in `faces1` array represent a live person as opposed being still images.
+`liveliness2`|**float**<br>Probability, expressed as float between (0..1), that the received set of images in `faces2` array represent a live person as opposed being still images.
+
+### Custom Errors
+
+Code | Meaning | Action
+---------- | ---------- | ----------
+422 | Well formed request received, but images were not accepted (reason specified in `error` field) | Capture a NEW set of images and try again
+
+Please also see [#errors](#errors) for description of standard errors.

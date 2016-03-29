@@ -1,0 +1,68 @@
+## /v1/sessions
+
+> Download [session_request_example_body.json](examples/api_v1/session_request_example_body.json) and use:
+
+```shell
+python2 curl_hmac.py test secret POST /v1/sessions \
+    -f 'session_request_example_body.json' -r
+```
+
+> Alternatively:
+
+```shell
+curl https://api.aimbrain.com:443/v1/sessions \
+    -H 'Content-Type: application/json' \
+    -H 'X-aimbrain-apikey: test' \
+    -H 'X-aimbrain-signature: E7vPXCNHsJQhadkTruAbCE+q9fCmRK9Gf+wtl2/3yrA=' \
+    --data @session_request_example_body.json
+```
+
+> Example response:
+
+```shell
+{
+    "behaviour":0,
+    "face":0,
+    "session":"test-user-test-user-1234567890-1459141412877914289"
+}
+```
+
+This endpoint creates a server-side session and returns unique session id to be used with further API requests.
+
+<aside class="notice">
+Session ID will automatically expire after 24 hours of the last API request associated with that session.
+</aside>
+
+### HTTP Request
+`POST /v1/sessions`
+
+### Body
+
+Parameter | Description
+-------------------------------|--------------------------------------
+`userId`<br><span class="label notice">required</span> | **string**<br>Random anonymous static ID used to identify app users.
+`device`<br><span class="label notice">required</span> | **string**<br>User's device name used in the Behavioural Module and to calculate the precise accuracy by only testing between users with the same device.
+`system`<br><span class="label notice">required</span> | **string**<br>Operating system's name and version used for tracking SDK’s usage statistics.
+`screenHeight`<br><span class="label notice">required</span> | **integer**<br>User's device screen height (px).
+`screenWidth`<br><span class="label notice">required</span> | **integer**<br>User's device screen width (px).
+
+### HTTP Response
+Status code: `200 OK`
+
+Parameter | Description
+------------------------------|--------------------------------------
+`session`|**string**<br>Generated session id for use with other API requests to maintain session semantics.
+`face`|**integer**<br>Status of the Facial Module for given user (see below).
+`behaviour`|**integer**<br>Status of the Facial Module for given user and device pair (see below).
+
+### `face` parameter values:
+
+<%= partial "includes/api_v1/facial_module_states" %>
+
+### `behaviour` parameter values:
+
+<%= partial "includes/api_v1/behavioural_module_states" %>
+
+### Custom Errors
+
+No custom errors. Please see [#errors](#errors) for description of standard errors.

@@ -1,0 +1,53 @@
+## Authentication
+
+> To generate and run curl request using curl_hmac.py tool:
+
+```shell
+python2 curl_hmac.py test secret POST /v1/sessions\
+    '{"userId": "user", "device":"device", "system":"system"}'
+```
+
+> and to read request body from file:
+
+```shell
+python2 curl_hmac.py test secret POST /v1/sessions \
+    -f "request_example_body.json"
+```
+
+> Example output:
+
+```shell
+curl https://api.aimbrain.com:443/v1/sessions\
+    -H 'Content-Type: application/json'\
+    -H 'X-aimbrain-apikey: test'\
+    -H 'X-aimbrain-signature: uPVe74VR9ncmxltwNX69pe6amFTMbJGM0Y8dIGk8vSI='\
+    -d '{"userId": "user", "device":"device", "system":"system"}'
+```
+
+
+AimBrain uses API key pairs (API key and API secret) to allow access to the API. You can register a new API key by [emailing us](mailto:team@aimbrain.com).
+
+AimBrain expects for the API key and HMAC Signature to be included in all API requests to the server in the HTTP headers that look like the following:
+
+`X-aimbrain-apikey: api-key`<br>
+`X-aimbrain-signature: base64-hmac-signature`
+
+To make development, testing and debugging easier we provide a [python tool for generating correctly signed and formed curl requests](https://github.com/aimbrain/aimbrain-utils/blob/master/curl_hmac.py), as shown in the example.
+
+<aside class="notice">
+Remember - in the examples you must replace <code>test</code> with your personal API Key and <code>secret</code> with your personal API Secret.
+</aside>
+
+<aside class="warning">
+You MUST never share the API Secret parameter with other people. If it happened unintentionally please generate a new API key pair via dashboard and disable the old one.
+</aside>
+
+### Generating X-aimbrain-signature
+
+Use base64 encoded HMAC SHA256 digest as the request signature:
+
+`X-aimbrain-signature = base64(HMAC_SHA256(secret, message))`, where
+
+`secret` is your API Secret, and
+
+`message = uppercase_http_method + '\n' + lovercase_endpoint + '\n' + request_body`.

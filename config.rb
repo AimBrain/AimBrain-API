@@ -38,3 +38,5 @@ configure :build do
   # activate :asset_hash
   # activate :gzip
 end
+
+activate :livereload

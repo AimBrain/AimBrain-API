@@ -1,0 +1,56 @@
+## /v1/face/auth
+
+> Download [face_auth_request_example_body.json](examples/api_v1/face_auth_request_example_body.json) and use:
+
+```shell
+python2 curl_hmac.py test secret POST /v1/face/auth \
+    -f 'face_auth_request_example_body.json' -r
+```
+
+> Alternatively:
+
+```shell
+curl https://api.aimbrain.com:443/v1/face/auth \
+    -H 'Content-Type: application/json' \
+    -H 'X-aimbrain-apikey: test' \
+    -H 'X-aimbrain-signature: dBxk9M++dNhI7pk+tXvAVaUwlWuOPl8S4wlmrhKhSqs=' \
+    --data @face_auth_request_example_body.json
+```
+
+> Example response:
+
+```shell
+{
+    "score":0.95256084,
+    "liveliness":0.05330102
+}
+```
+
+This endpoint authenticates users based on the Facial Module.
+
+### HTTP Request
+`POST /v1/face/auth`
+
+### Body
+
+Parameter | Description
+------------------------------|--------------------------------------
+`session`<br><span class="label notice">required</span>|**string**<br>Current Session ID as returned by [/v1/sessions](#v1-sessions) request.
+`faces`<br><span class="label notice">required</span>|**array of strings**<br>List of base64 encoded images containing user face. JPEG and PNG formats supported.
+
+### HTTP Response
+Status code: `200 OK`
+
+Parameter | Description
+------------------------------|--------------------------------------
+`score`|**float**<br>Probability, expressed as float between (0..1), that the current user is the original / enrolled user.
+`liveliness`|**float**<br>Probability, expressed as float between (0..1), that the received set of images represent a live person as opposed being still images.
+
+### Custom Errors
+
+Code | Meaning | Action
+---------- | ---------- | ----------
+422 | Well formed request received, but images were not accepted (reason specified in `error` field) | Capture a NEW set of images and try again
+424 | Well formed request received, but we could not find an enrolled user with the supplied id | Confirm if enrollnment was done for the specific user
+
+Please also see [#errors](#errors) for description of standard errors.

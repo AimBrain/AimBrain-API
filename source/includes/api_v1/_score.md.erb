@@ -1,0 +1,34 @@
+## /v1/score
+
+REQUEST
+POST  /v1/score
+
+Headers:
+Content-Type "application/json"
+X-aimbrain-apikey <apiKey>
+X-aimbrain-signature <HMAC>
+
+BODY
+{
+"session": <session>
+}
+RESPONSE 200
+Ok
+BODY
+{
+status: <learning status: (int) 0-learned 1-learning>
+score: <score (float) if learned>
+}
+
+RESPONSE 404
+invalid session
+BODY
+{
+"error": <human readable error message>
+}
+RESPONSE 401
+invalid apiKey
+BODY
+{
+"error": <human readable error message>
+}

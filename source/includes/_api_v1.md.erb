@@ -1,0 +1,25 @@
+# API v1
+
+All API requests use POST verb to prevent caching issues and request length limitations. Requests are passed in JSON format in the HTTP request body and MUST include the following header (alongside valid authentication headers):
+
+`Content-Type: application/json`
+
+**Production Base URL:** `https://api.aimbrain.com/`
+
+<aside class="notice">
+HTTPS is required. AimBrain only responds to encrypted traffic so that your data remains safe.
+</aside>
+
+<%= partial "includes/api_v1/authentication" %>
+
+<%= partial "includes/api_v1/sessions" %>
+
+<%= partial "includes/api_v1/behavioural" %>
+
+<%= partial "includes/api_v1/face_enroll" %>
+
+<%= partial "includes/api_v1/face_auth" %>
+
+<%= partial "includes/api_v1/face_compare" %>
+
+<%= partial "includes/api_v1/errors" %>

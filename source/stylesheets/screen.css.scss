@@ -625,3 +625,14 @@ html, body {
 .highlight, .highlight .w {
   background-color: $code-bg;
 }
+
+.label {
+    font-size: 10px;
+    text-transform: uppercase;
+    // font-weight: 200;
+    color: #9E9E9E;
+
+    &.notice {
+        color: #EF5350;
+    }
+}
