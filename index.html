@@ -623,7 +623,7 @@ Accelerometer readings MUST be sampled at around 100Hz frequency and for at leas
 </tr>
 <tr>
 <td><code class="prettyprint">faces</code><br><span class="label notice">required</span></td>
-<td><strong>array of strings</strong><br>List of base64 encoded images containing user face. JPEG and PNG formats supported.</td>
+<td><strong>array of strings</strong><br>List of base64 encoded images or videos containing user face. H.264 encoded videos, JPEG and PNG formats supported. 640x480 maximum resolution, 500kB maximum size. In case of video, no longer than 3 seconds.</td>
 </tr>
 </tbody></table>
 
@@ -694,6 +694,10 @@ Accelerometer readings MUST be sampled at around 100Hz frequency and for at leas
 
 <p>This endpoint authenticates users based on the Facial Module.</p>
 
+<aside class="notice">
+  Liveliness detection is performed only if videos are sent in `faces` and works by detecting blinking. In case custom implementation is done instead of using the SDK, we recommend adding prompts for users to blink if liveliness detection is required.
+</aside>
+
 <h3 id="http-request">HTTP Request</h3>
 
 <p><code class="prettyprint">POST /v1/face/auth</code></p>
@@ -712,7 +716,7 @@ Accelerometer readings MUST be sampled at around 100Hz frequency and for at leas
 </tr>
 <tr>
 <td><code class="prettyprint">faces</code><br><span class="label notice">required</span></td>
-<td><strong>array of strings</strong><br>List of base64 encoded images containing user face. JPEG and PNG formats supported.</td>
+<td><strong>array of strings</strong><br>List of base64 encoded images or videos containing user face. H.264 encoded videos, JPEG and PNG formats supported. 640x480 maximum resolution, 500kB maximum size. In case of video, no longer than 3 seconds.</td>
 </tr>
 </tbody></table>
 
@@ -732,7 +736,7 @@ Accelerometer readings MUST be sampled at around 100Hz frequency and for at leas
 </tr>
 <tr>
 <td><code class="prettyprint">liveliness</code></td>
-<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the received set of images represent a live person as opposed being still images.</td>
+<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the received video in <code class="prettyprint">faces</code> array represent a live person as opposed being still image. In case of images are sent in <code class="prettyprint">faces</code>, 0.0 is returned.</td>
 </tr>
 </tbody></table>
 
@@ -794,6 +798,10 @@ Accelerometer readings MUST be sampled at around 100Hz frequency and for at leas
 <p>This endpoint compares two faces based on the Facial Module.</p>
 
 <aside class="notice">
+  Liveliness detection is performed only if videos are sent in `faces1`/`faces2` and works by detecting blinking. In case custom implementation is done instead of using the SDK, we recommend adding prompts for users to blink if liveliness detection is required.
+</aside>
+
+<aside class="notice">
 No images are stored server-side for this request.
 </aside>
 
@@ -811,11 +819,11 @@ No images are stored server-side for this request.
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">faces1</code><br><span class="label notice">required</span></td>
-<td><strong>array of strings</strong><br>List of base64 encoded images containing user face. JPEG and PNG formats supported.</td>
+<td><strong>array of strings</strong><br>List of base64 encoded images or videos containing user face. H.264 encoded videos, JPEG and PNG formats supported. 640x480 maximum resolution, 500kB maximum size. In case of video, no longer than 3 seconds.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">faces2</code><br><span class="label notice">required</span></td>
-<td><strong>array of strings</strong><br>List of base64 encoded images containing user face. JPEG and PNG formats supported.</td>
+<td><strong>array of strings</strong><br>List of base64 encoded images or videos containing user face. H.264 encoded videos, JPEG and PNG formats supported. 640x480 maximum resolution, 500kB maximum size. In case of video, no longer than 3 seconds.</td>
 </tr>
 </tbody></table>
 
@@ -835,11 +843,11 @@ No images are stored server-side for this request.
 </tr>
 <tr>
 <td><code class="prettyprint">liveliness1</code></td>
-<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the received set of images in <code class="prettyprint">faces1</code> array represent a live person as opposed being still images.</td>
+<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the received video in <code class="prettyprint">faces1</code> array represent a live person as opposed being still image. In case of images are sent in <code class="prettyprint">faces1</code>, 0.0 is returned.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">liveliness2</code></td>
-<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the received set of images in <code class="prettyprint">faces2</code> array represent a live person as opposed being still images.</td>
+<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the received video in <code class="prettyprint">faces2</code> array represent a live person as opposed being still image. In case of images are sent in <code class="prettyprint">faces2</code>, 0.0 is returned.</td>
 </tr>
 </tbody></table>
 
