@@ -30,6 +30,10 @@ curl https://api.aimbrain.com:443/v1/face/compare \
 This endpoint compares two faces based on the Facial Module.
 
 <aside class="notice">
+  Liveliness detection is performed only if videos are sent in `faces1`/`faces2` and works by detecting blinking. In case custom implementation is done instead of using the SDK, we recommend adding prompts for users to blink if liveliness detection is required.
+</aside>
+
+<aside class="notice">
 No images are stored server-side for this request.
 </aside>
 
@@ -41,8 +45,8 @@ No images are stored server-side for this request.
 
 Parameter | Description
 ------------------------------|--------------------------------------
-`faces1`<br><span class="label notice">required</span>|**array of strings**<br>List of base64 encoded images containing user face. JPEG and PNG formats supported.
-`faces2`<br><span class="label notice">required</span>|**array of strings**<br>List of base64 encoded images containing user face. JPEG and PNG formats supported.
+`faces1`<br><span class="label notice">required</span>|**array of strings**<br>List of base64 encoded images or videos containing user face. H.264 encoded videos, JPEG and PNG formats supported. 640x480 maximum resolution, 500kB maximum size. In case of video, no longer than 3 seconds.
+`faces2`<br><span class="label notice">required</span>|**array of strings**<br>List of base64 encoded images or videos containing user face. H.264 encoded videos, JPEG and PNG formats supported. 640x480 maximum resolution, 500kB maximum size. In case of video, no longer than 3 seconds.
 
 ### HTTP Response
 Status code: `200 OK`
@@ -50,8 +54,8 @@ Status code: `200 OK`
 Parameter | Description
 ------------------------------|--------------------------------------
 `score`|**float**<br>Probability, expressed as float between (0..1), that the current user is the original / enrolled user.
-`liveliness1`|**float**<br>Probability, expressed as float between (0..1), that the received set of images in `faces1` array represent a live person as opposed being still images.
-`liveliness2`|**float**<br>Probability, expressed as float between (0..1), that the received set of images in `faces2` array represent a live person as opposed being still images.
+`liveliness1`|**float**<br>Probability, expressed as float between (0..1), that the received video in `faces1` array represent a live person as opposed being still image. In case of images are sent in `faces1`, 0.0 is returned.
+`liveliness2`|**float**<br>Probability, expressed as float between (0..1), that the received video in `faces2` array represent a live person as opposed being still image. In case of images are sent in `faces2`, 0.0 is returned.
 
 ### Custom Errors
 
