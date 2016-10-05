@@ -15,6 +15,7 @@ toc_footers:
 
 includes:
   - modules
+  - security
   - api_v1
 
 search: true
