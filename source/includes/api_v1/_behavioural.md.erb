@@ -88,6 +88,10 @@ Parameter | Description
 
 <%= partial "includes/api_v1/behavioural_module_states" %>
 
+<aside class="notice">
+The Behavioural Module starts in listen only mode. When integrated with new applications the endpoint will return score and status as 0.0 and 0 respectively until a sufficient number of interactions is reached.
+</aside>
+
 ### Custom Errors
 
 No custom errors. Please see [#errors](#errors) for description of standard errors.
