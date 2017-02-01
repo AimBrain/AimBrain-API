@@ -1020,6 +1020,287 @@ No images are stored server-side for this request.
 
 <p>Please also see <a href="#errors">#errors</a> for description of standard errors.</p>
 
+<h2 id="v1-voice-token">/v1/voice/token</h2>
+
+<blockquote>
+<p>Download <a href="examples/api_v1/voice_token_request_example_body.json">voice_token_request_example_body.json</a> and use:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/voice/token <span class="se">\</span>
+    -f <span class="s1">'voice_token_request_example_body.json'</span> -r
+</code></pre>
+
+<blockquote>
+<p>Alternatively:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl https://api.aimbrain.com:443/v1/voice/token <span class="se">\</span>
+    -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-apikey: test'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-signature: isMJ65cfk0B4nJEx3YKroxrkTIkxlE0r/FJhyUVmgEQ='</span> <span class="se">\</span>
+    --data @voice_token_request_example_body.json
+</code></pre>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"token"</span>:<span class="s2">"Hello, my password is 6-6-7, verify me"</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>This endpoint a token to be displayed during voice recording.</p>
+
+<aside class="notice">
+Voice token will automatically expire after 5 minutes.
+</aside>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /v1/voice/token</code></p>
+
+<h3 id="body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">session</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Current Session ID as returned by <a href="#v1-sessions">/v1/sessions</a> request.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">tokentype</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>The type of token to be returned.</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">token</code></td>
+<td><strong>string</strong><br>The token to be displayed during voice recording.</td>
+</tr>
+</tbody></table>
+
+<h3 id="tokentype-parameter-values"><code class="prettyprint">tokentype</code> parameter values:</h3>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">enroll-1</code></td>
+<td>Token type to be used during the first enrollment step.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">enroll-2</code></td>
+<td>Token type to be used during the second enrollment step.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">enroll-3</code></td>
+<td>Token type to be used during the third enrollment step.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">enroll-4</code></td>
+<td>Token type to be used during the fourth enrollment step.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">enroll-5</code></td>
+<td>Token type to be used during the fifth enrollment step.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">auth</code></td>
+<td>Token type to be used during authentication.</td>
+</tr>
+</tbody></table>
+
+<h3 id="custom-errors">Custom Errors</h3>
+
+<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+
+<h2 id="v1-voice-enroll">/v1/voice/enroll</h2>
+
+<blockquote>
+<p>Download <a href="examples/api_v1/voice_enroll_request_example_body.json">voice_enroll_request_example_body.json</a> and use:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/voice/enroll <span class="se">\</span>
+    -f <span class="s1">'voice_enroll_request_example_body.json'</span> -r
+</code></pre>
+
+<blockquote>
+<p>Alternatively:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl https://api.aimbrain.com:443/v1/voice/enroll <span class="se">\</span>
+    -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-apikey: test'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-signature: mUBC8eDZ45ObdC8IFll8gADoAsh70zGQcqPnYjVIsZI='</span> <span class="se">\</span>
+    --data @voice_enroll_request_example_body.json
+</code></pre>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"voiceSamples"</span>:1
+<span class="o">}</span>
+</code></pre>
+
+<p>This endpoint enrolls users based on the Voice Module.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /v1/voice/enroll</code></p>
+
+<h3 id="body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">session</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Current Session ID as returned by <a href="#v1-sessions">/v1/sessions</a> request.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">voices</code><br><span class="label notice">required</span></td>
+<td><strong>array of strings</strong><br>List of base64 encoded voice samples of the user. 16k Hz sampling rate, 500kB maximum size. No longer than 5 seconds.</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">voiceSamples</code></td>
+<td><strong>integer</strong><br>Number of voice samples accepted for enrollment.</td>
+</tr>
+</tbody></table>
+
+<p>Please also see <a href="#errors">#errors</a> for description of standard errors.</p>
+
+<h2 id="v1-voice-auth">/v1/voice/auth</h2>
+
+<blockquote>
+<p>Download <a href="examples/api_v1/voice_auth_request_example_body.json">voice_auth_request_example_body.json</a> and use:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/voice/auth <span class="se">\</span>
+    -f <span class="s1">'voice_auth_request_example_body.json'</span> -r
+</code></pre>
+
+<blockquote>
+<p>Alternatively:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl https://api.aimbrain.com:443/v1/voice/auth <span class="se">\</span>
+    -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-apikey: test'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-signature: wVeNTVyYGGfy119x5kOLoisuRTBttyxxht/sJpLy7g8='</span> <span class="se">\</span>
+    --data @voice_auth_request_example_body.json
+</code></pre>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"score"</span>:0.95256084,
+    <span class="s2">"liveliness"</span>:1.0
+<span class="o">}</span>
+</code></pre>
+
+<p>This endpoint authenticates users based on the Voice Module.</p>
+
+<aside class="notice">
+  Liveliness detection is performed only if the voice sample was created by using the voice token created by <a href="#v1-voice-token">/v1/voice/token</a>.
+</aside>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /v1/voice/auth</code></p>
+
+<h3 id="body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">session</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Current Session ID as returned by <a href="#v1-sessions">/v1/sessions</a> request.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">voices</code><br><span class="label notice">required</span></td>
+<td><strong>array of strings</strong><br>List of base64 encoded voice samples of the user. 16k Hz sampling rate, 500kB maximum size. No longer than 5 seconds.</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">score</code></td>
+<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the current user is the original / enrolled user.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">liveliness</code></td>
+<td><strong>float</strong><br>Probability, expressed as float between (0..1), that the received voice samples in <code class="prettyprint">voices</code> array represent a live person as opposed being a recording. In case voice token is not used, 0.0 is returned.</td>
+</tr>
+</tbody></table>
+
+<h3 id="custom-errors">Custom Errors</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Action</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>424</td>
+<td>Well formed request received, but we could not find an enrolled user with the supplied id</td>
+<td>Confirm if enrollnment was done for the specific user</td>
+</tr>
+</tbody></table>
+
+<p>Please also see <a href="#errors">#errors</a> for description of standard errors.</p>
+
 <h2 id="errors">Errors</h2>
 
 <blockquote>
