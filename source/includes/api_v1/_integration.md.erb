@@ -1,0 +1,37 @@
+## Integration
+This section provides an overview of how to integrate AimBrain into production systems as described in the architecture above. For specific SDK integration please view the relevant READMEs.
+The integration overview is provided as sequence diagrams below.
+
+In these sequence diagrams interactions between the following components are shown:
+
+* **App** - the app using the AimBrain SDK - developed and maintained by the client
+* **SDK** - the AimBrain SDK - developed and maintained by AimBrain
+* **Server** - the backend server the **App** communicates to - controlled by the client
+* **API** - the AimBrain API - developed and maintained by AimBrain
+
+### Session
+![AimBrain Production Architecture](images/integration_session.png)
+
+1. [iOS](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-new-session-call), [Android](https://github.com/aimbrain/aimbrain-android-sdk#serialising-a-new-session-call)
+2. [iOS](https://github.com/aimbrain/aimbrain-ios-sdk#configuring-with-existing-session), [Android](https://github.com/aimbrain/aimbrain-android-sdk#request-serialisation)
+
+### Behavioural
+![AimBrain Production Architecture](images/integration_behavioural.png)
+
+1. [iOS](https://github.com/aimbrain/aimbrain-ios-sdk#starting-collection), [Android](https://github.com/aimbrain/aimbrain-android-sdk#starting-data-collection)
+2. [iOS](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-behavioural-data-api-call), [Android](https://github.com/aimbrain/aimbrain-android-sdk#serialising-behavioural-data-submission-request)
+
+### Facial
+![AimBrain Production Architecture](images/integration_face.png)
+
+1. [iOS](https://github.com/aimbrain/aimbrain-ios-sdk#recording-video-of-the-users-face), [Android](https://github.com/aimbrain/aimbrain-android-sdk#recording-video-of-users-face)
+2. [iOS auth](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-authentication-calls), [iOS enroll](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-enroll-calls), [Android auth](https://github.com/aimbrain/aimbrain-android-sdk#serialising-authentication-with-the-facial-module), [Android enroll](https://github.com/aimbrain/aimbrain-android-sdk#serialising-enrolling-with-the-facial-module-request)
+3. /face/auth or /face/enroll endpoint
+
+### Voice
+![AimBrain Production Architecture](images/integration_voice.png)
+
+1. [iOS](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-voice-token-call), [Android](https://github.com/aimbrain/aimbrain-android-sdk#serialising-voice-token-call)
+2. [iOS](https://github.com/aimbrain/aimbrain-ios-sdk#recording-user-voice), [Android](https://github.com/aimbrain/aimbrain-android-sdk#recording-user-voice)
+3. [iOS auth](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-voice-module-authentication-calls), [iOS enroll](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-voice-module-enroll-calls), [Android auth](https://github.com/aimbrain/aimbrain-android-sdk#serialising-authentication-with-the-voice-module), [Android enroll](https://github.com/aimbrain/aimbrain-android-sdk#serialising-enrolling-with-the-voice-module-request)
+4. /voice/auth or /voice/enroll endpoint
