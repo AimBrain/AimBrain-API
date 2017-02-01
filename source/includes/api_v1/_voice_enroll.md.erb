@@ -1,0 +1,47 @@
+## /v1/voice/enroll
+
+> Download [voice_enroll_request_example_body.json](examples/api_v1/voice_enroll_request_example_body.json) and use:
+
+```shell
+python2 curl_hmac.py test secret POST /v1/voice/enroll \
+    -f 'voice_enroll_request_example_body.json' -r
+```
+
+> Alternatively:
+
+```shell
+curl https://api.aimbrain.com:443/v1/voice/enroll \
+    -H 'Content-Type: application/json' \
+    -H 'X-aimbrain-apikey: test' \
+    -H 'X-aimbrain-signature: mUBC8eDZ45ObdC8IFll8gADoAsh70zGQcqPnYjVIsZI=' \
+    --data @voice_enroll_request_example_body.json
+```
+
+> Example response:
+
+```shell
+{
+    "voiceSamples":1
+}
+```
+
+This endpoint enrolls users based on the Voice Module.
+
+### HTTP Request
+`POST /v1/voice/enroll`
+
+### Body
+
+Parameter | Description
+------------------------------|--------------------------------------
+`session`<br><span class="label notice">required</span>|**string**<br>Current Session ID as returned by [/v1/sessions](#v1-sessions) request.
+`voices`<br><span class="label notice">required</span>|**array of strings**<br>List of base64 encoded voice samples of the user. 16k Hz sampling rate, 500kB maximum size. No longer than 5 seconds.
+
+### HTTP Response
+Status code: `200 OK`
+
+Parameter | Description
+------------------------------|--------------------------------------
+`voiceSamples`|**integer**<br>Number of voice samples accepted for enrollment.
+
+Please also see [#errors](#errors) for description of standard errors.
