@@ -260,13 +260,64 @@ HTTPS is required. AimBrain only responds to encrypted traffic so that your data
 
 <h2 id="architecture">Architecture</h2>
 
-<h3 id="architecture-for-behavioural-pilots">Architecture for Behavioural Pilots</h3>
-
-<p><img alt="AimBrain Pilot Architecture" src="images/architecture_pilot.png" /></p>
-
-<h3 id="architecture-for-facial-voice-pilots-and-production-deployment">Architecture for Facial / Voice Pilots and Production deployment</h3>
+<h3 id="production-architecture">Production architecture</h3>
 
 <p><img alt="AimBrain Production Architecture" src="images/architecture_production.png" /></p>
+
+<h3 id="security-considerations">Security considerations</h3>
+
+<h2 id="integration">Integration</h2>
+
+<p>This section provides an overview of how to integrate AimBrain into production systems as described in the architecture above. For specific SDK integration please view the relevant READMEs.
+The integration overview is provided as sequence diagrams below.</p>
+
+<p>In these sequence diagrams interactions between the following components are shown:</p>
+
+<ul>
+<li><strong>App</strong> - the app using the AimBrain SDK - developed and maintained by the client</li>
+<li><strong>SDK</strong> - the AimBrain SDK - developed and maintained by AimBrain</li>
+<li><strong>Server</strong> - the backend server the <strong>App</strong> communicates to - controlled by the client</li>
+<li><strong>API</strong> - the AimBrain API - developed and maintained by AimBrain</li>
+</ul>
+
+<h3 id="session">Session</h3>
+
+<p><img alt="AimBrain Production Architecture" src="images/integration_session.png" /></p>
+
+<ol>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-new-session-call">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-a-new-session-call">Android</a></li>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#configuring-with-existing-session">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#request-serialisation">Android</a></li>
+</ol>
+
+<h3 id="behavioural">Behavioural</h3>
+
+<p><img alt="AimBrain Production Architecture" src="images/integration_behavioural.png" /></p>
+
+<ol>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#starting-collection">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#starting-data-collection">Android</a></li>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-behavioural-data-api-call">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-behavioural-data-submission-request">Android</a></li>
+</ol>
+
+<h3 id="facial">Facial</h3>
+
+<p><img alt="AimBrain Production Architecture" src="images/integration_face.png" /></p>
+
+<ol>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#recording-video-of-the-users-face">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#recording-video-of-users-face">Android</a></li>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-authentication-calls">iOS auth</a>, <a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-enroll-calls">iOS enroll</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-authentication-with-the-facial-module">Android auth</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-enrolling-with-the-facial-module-request">Android enroll</a></li>
+<li>/face/auth or /face/enroll endpoint</li>
+</ol>
+
+<h3 id="voice">Voice</h3>
+
+<p><img alt="AimBrain Production Architecture" src="images/integration_voice.png" /></p>
+
+<ol>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-voice-token-call">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-voice-token-call">Android</a></li>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#recording-user-voice">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#recording-user-voice">Android</a></li>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-voice-module-authentication-calls">iOS auth</a>, <a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-voice-module-enroll-calls">iOS enroll</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-authentication-with-the-voice-module">Android auth</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-enrolling-with-the-voice-module-request">Android enroll</a></li>
+<li>/voice/auth or /voice/enroll endpoint</li>
+</ol>
 
 <h2 id="authentication">Authentication</h2>
 
