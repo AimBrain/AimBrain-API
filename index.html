@@ -1357,6 +1357,416 @@ Voice token will automatically expire after 5 minutes.
 </tr>
 </tbody></table>
 
+          <h1 id="authenticator">Authenticator</h1>
+
+<p>All API requests use POST verb to prevent caching issues and request length limitations. Requests are passed in JSON format in the HTTP request body and MUST include the following header (alongside valid authentication headers):</p>
+
+<p><code class="prettyprint">Content-Type: application/json</code></p>
+
+<p><strong>Endpoint:</strong> <code class="prettyprint">https://authenticator1.aimbrain.com/</code></p>
+
+<aside class="notice">
+HTTPS is required. AimBrain only responds to encrypted traffic so that your data remains safe.
+</aside>
+
+<h2 id="authentication">Authentication</h2>
+
+<blockquote>
+<p>To generate and run curl request using curl_hmac_authenticator.py tool:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac_authenticator.py bank secret POST /v1/requests<span class="se">\</span>
+    <span class="s1">'{"ids":["XXXXXXXX"],"timeout":180,"modules":[0],"threshold":0.5,"attempts":3,"title":"Title","summary":"Summary"}'</span>
+</code></pre>
+
+<blockquote>
+<p>Example output:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl -k https://authenticator1.aimbrain.com:443/v1/requests<span class="se">\</span>
+    -H <span class="s1">'Content-Type: application/json'</span><span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-apikey: bank'</span><span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-signature: /1vf7VfMHoLPcKgRBqTqATpP16MqoyyA3e05SgxtSxQ='</span><span class="se">\</span>
+    -d <span class="s1">'{"ids":["XXXXXXXX"],"timeout":180,"modules":[0],"threshold":0.5,"attempts":3,"title":"Title","summary":"Summary"}'</span>
+</code></pre>
+
+<p>AimBrain uses API key pairs (API key and API secret) to allow access to the API. You can register a new API key by <a href="mailto:team@aimbrain.com">emailing us</a>.</p>
+
+<p>AimBrain expects for the API key and HMAC Signature to be included in all API requests to the server in the HTTP headers that look like the following:</p>
+
+<p><code class="prettyprint">X-aimbrain-apikey: api-key</code><br>
+<code class="prettyprint">X-aimbrain-signature: base64-hmac-signature</code></p>
+
+<p>To make development, testing and debugging easier we provide a <a href="https://github.com/aimbrain/aimbrain-utils/blob/master/curl_hmac_authenticator.py">python tool for generating correctly signed and formed curl requests</a>, as shown in the example.</p>
+
+<aside class="notice">
+Remember - in the examples you must replace <code>bank</code> with your personal API Key and <code>secret</code> with your personal API Secret.
+</aside>
+
+<aside class="notice">
+Because a self-signed certificate is used some tools might complain about it not passing verification.
+</aside>
+
+<h3 id="generating-x-aimbrain-signature">Generating X-aimbrain-signature</h3>
+
+<p>Use base64 encoded HMAC SHA256 digest as the request signature:</p>
+
+<p><code class="prettyprint">X-aimbrain-signature = base64(HMAC_SHA256(secret, message))</code>, where</p>
+
+<p><code class="prettyprint">secret</code> is your API Secret, and</p>
+
+<p><code class="prettyprint">message = uppercase_http_method + &#39;\n&#39; + lovercase_endpoint + &#39;\n&#39; + request_body</code>.</p>
+
+<h2 id="requests">/requests</h2>
+
+<blockquote>
+<p>Example use:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac_authenticator.py bank secret POST /v1/requests<span class="se">\</span>
+    <span class="s1">'{"ids":["XXXXXXXX"],"timeout":180,"modules":[0],"threshold":0.5,"attempts":3,"title":"Title","summary":"Summary"}'</span> -r
+</code></pre>
+
+<blockquote>
+<p>Alternatively:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl -k https://authenticator1.aimbrain.com:443/v1/requests
+    -H <span class="s1">'Content-Type: application/json'</span>
+    -H <span class="s1">'X-aimbrain-apikey: bank'</span>
+    -H <span class="s1">'X-aimbrain-signature: /1vf7VfMHoLPcKgRBqTqATpP16MqoyyA3e05SgxtSxQ='</span>
+    -d <span class="s1">'{"ids":["XXXXXXXX"],"timeout":180,"modules":[0],"threshold":0.5,"attempts":3,"title":"Title","summary":"Summary"}'</span>
+</code></pre>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"requestid"</span>:<span class="s2">"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>Create new authentication request. Returns unique authentication ID which reflects the authentication request progress.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /requests</code></p>
+
+<h3 id="body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">ids</code><br><span class="label notice">required</span></td>
+<td><strong>array of strings</strong><br>List of authenticator IDs that the client wants to push notification to. More than one usually represents multiple devices held by the customer.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">threshold</code><br><span class="label notice">required</span></td>
+<td><strong>number</strong><br>Threshold (probability) of when we consider user successfully authenticated between 0..1. 0 - definitely not the user, 1 - definitely the user.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">modules</code><br><span class="label notice">required</span></td>
+<td><strong>array of integers</strong><br>A list of allowed modules for authentication (1 - face, 2 - voice).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">attempts</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>Number of attempts that the customer can fail authentication before considering the original authentication request as failed.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">timeout</code><br><span class="label notice">required</span></td>
+<td><strong>integer</strong><br>A timeout, in Seconds, from the original authentication request after which it is considered as failed.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">title</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Title to show the user when requesting authentication.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">summary</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Summary to show the user when requesting authentication.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">meta</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Custom field which will be included with response, limited to 1024 characters.</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">requestid</code></td>
+<td><strong>string</strong><br>A unique request id used for tracking the authentication request progress. Different from the one sent to the app.</td>
+</tr>
+</tbody></table>
+
+<h3 id="custom-errors">Custom Errors</h3>
+
+<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+
+<h2 id="requests-requestid-status">/requests/REQUESTID/status</h2>
+
+<blockquote>
+<p>Example use:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac_authenticator.py bank secret <span class="se">\</span>
+  POST /v1/requests/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/status/ <span class="s1">''</span> -r
+</code></pre>
+
+<blockquote>
+<p>Alternatively:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl -k https://authenticator1.aimbrain.com:443/v1/requests/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/status/
+    -H <span class="s1">'Content-Type: application/json'</span>
+    -H <span class="s1">'X-aimbrain-apikey: bank'</span>
+    -H <span class="s1">'X-aimbrain-signature: yqgQpOzesjoUeEbIsqVNRilxKHewn8vX40qA6TCPza8='</span>
+    -d <span class="s1">''</span>
+</code></pre>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"created"</span>:1488477936,
+    <span class="s2">"remaining_attempts"</span>:3,
+    <span class="s2">"remaining_time"</span>:0,
+    <span class="s2">"status"</span>:2,
+    <span class="s2">"attempts"</span>:[<span class="o">{</span>
+        <span class="s2">"timestamp"</span>:1488477944,
+        <span class="s2">"id"</span>:<span class="s2">"XXXXXXXXXX"</span>,
+        <span class="s2">"score"</span>:0.9908461,
+        <span class="s2">"module"</span>:0
+    <span class="o">}]</span>,
+    <span class="s2">"request"</span>:<span class="o">{</span>
+        <span class="s2">"timeout"</span>:180,
+        <span class="s2">"modules"</span>:[0],
+        <span class="s2">"ids"</span>:[<span class="s2">"XXXXXXXXXX"</span><span class="o">]</span>,
+        <span class="s2">"threshold"</span>:0.5,
+        <span class="s2">"attempts"</span>:3,
+        <span class="s2">"title"</span>:<span class="s2">"Title"</span>,
+        <span class="s2">"summary"</span>:<span class="s2">"Summary"</span>,
+        <span class="s2">"meta"</span>:<span class="s2">""</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>Query for the authentication request progress.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /requests/REQUESTID/status</code></p>
+
+<h3 id="body">Body</h3>
+
+<p>No body is required with this request. The request_id is passed through the URL.</p>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">remaining_attempts</code></td>
+<td><strong>integer</strong><br>Remaining attempts.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">remaining_time</code></td>
+<td><strong>integer</strong><br>Remaining time in seconds.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">created</code></td>
+<td><strong>integer</strong><br>UTC timestamp.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">status</code></td>
+<td><strong>integer</strong><br>Status of the authentication request (see below).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">attempts</code></td>
+<td><strong>array of objects</strong><br>List of authentication attempts (see below).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">request</code></td>
+<td><strong>object</strong><br>JSON Object to represent the original request parameters (see below).</td>
+</tr>
+</tbody></table>
+
+<h3 id="status-parameter-values"><code class="prettyprint">status</code> parameter values:</h3>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">0</code></td>
+<td>Request created.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">1</code></td>
+<td>Notification sent.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">2</code></td>
+<td>Authenticated successfully.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">3</code></td>
+<td>Failed to authenticate within allowed attempts.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">4</code></td>
+<td>Failed to authenticate within allowed time (timed out).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">5</code></td>
+<td>User alerted the authentication request.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">6</code></td>
+<td>Other reason for failed authentication.</td>
+</tr>
+</tbody></table>
+
+<h3 id="attempts-object-fields"><code class="prettyprint">attempts</code> object fields:</h3>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">module</code></td>
+<td>Modules used.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">score</code></td>
+<td>Score of authentication.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">id</code></td>
+<td>Authenticator ID used.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">timestamp</code></td>
+<td>UTC timestamp.</td>
+</tr>
+</tbody></table>
+
+<h3 id="request-object-fields"><code class="prettyprint">request</code> object fields:</h3>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">ids</code></td>
+<td><strong>array of strings</strong><br>List of authenticator IDs as sent originally.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">threshold</code></td>
+<td><strong>number</strong><br>Threshold (probability) as sent originally.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">modules</code></td>
+<td><strong>array of integers</strong><br>List of allowed modules as sent originally.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">attempts</code></td>
+<td><strong>integer</strong><br>Number of attempts as sent originially.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">timeout</code></td>
+<td><strong>integer</strong><br>Timeout as sent originally.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">title</code></td>
+<td><strong>string</strong><br>Title as sent originally.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">summary</code></td>
+<td><strong>string</strong><br>Summary as sent originally.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">meta</code></td>
+<td><strong>string</strong><br>Custom meta info as sent originally.</td>
+</tr>
+</tbody></table>
+
+<h3 id="custom-errors">Custom Errors</h3>
+
+<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+
+<h2 id="errors">Errors</h2>
+
+<p>All errors are indicated by returning HTTP code which is NOT 200. Human readable description is returned via body in JSON format.</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">error</code></td>
+<td><strong>string</strong><br>Human readable error description.</td>
+</tr>
+</tbody></table>
+
+<p>The AimBrain API uses the following error codes:</p>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Action</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request &ndash; malformed request received (e.g. missing API key, API signature, required parameters or malformed json)</td>
+<td>Inspect the error message and fix any errors</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; your API key or API signature is invalid</td>
+<td>Check implementation and try generating a new key pair via dashboard</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden &ndash; specified session with the id could not be found</td>
+<td>Generate and include a valid session id and try again</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error &ndash; well formed request received, but we had a problem with our server</td>
+<td>Try again later</td>
+</tr>
+</tbody></table>
+
       </div>
       <div class="dark-box">
           <div class="lang-selector">
