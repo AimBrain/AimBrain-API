@@ -1,0 +1,55 @@
+## /requests
+
+> Example use:
+
+```shell
+python2 curl_hmac_authenticator.py bank secret POST /v1/requests\
+    '{"ids":["XXXXXXXX"],"timeout":180,"modules":[0],"threshold":0.5,"attempts":3,"title":"Title","summary":"Summary"}' -r
+```
+
+> Alternatively:
+
+```shell
+curl -k https://authenticator1.aimbrain.com:443/v1/requests
+    -H 'Content-Type: application/json'
+    -H 'X-aimbrain-apikey: bank'
+    -H 'X-aimbrain-signature: /1vf7VfMHoLPcKgRBqTqATpP16MqoyyA3e05SgxtSxQ='
+    -d '{"ids":["XXXXXXXX"],"timeout":180,"modules":[0],"threshold":0.5,"attempts":3,"title":"Title","summary":"Summary"}'
+```
+
+> Example response:
+
+```shell
+{
+    "requestid":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+}
+```
+
+Create new authentication request. Returns unique authentication ID which reflects the authentication request progress.
+
+### HTTP Request
+`POST /requests`
+
+### Body
+
+Parameter | Description
+------------------------------|--------------------------------------
+`ids`<br><span class="label notice">required</span>|**array of strings**<br>List of authenticator IDs that the client wants to push notification to. More than one usually represents multiple devices held by the customer.
+`threshold`<br><span class="label notice">required</span>|**number**<br>Threshold (probability) of when we consider user successfully authenticated between 0..1. 0 - definitely not the user, 1 - definitely the user.
+`modules`<br><span class="label notice">required</span>|**array of integers**<br>A list of allowed modules for authentication (1 - face, 2 - voice).
+`attempts`<br><span class="label notice">required</span>|**integer**<br>Number of attempts that the customer can fail authentication before considering the original authentication request as failed.
+`timeout`<br><span class="label notice">required</span>|**integer**<br>A timeout, in Seconds, from the original authentication request after which it is considered as failed.
+`title`<br><span class="label notice">required</span>|**string**<br>Title to show the user when requesting authentication.
+`summary`<br><span class="label notice">required</span>|**string**<br>Summary to show the user when requesting authentication.
+`meta`<br><span class="label notice">required</span>|**string**<br>Custom field which will be included with response, limited to 1024 characters.
+
+### HTTP Response
+Status code: `200 OK`
+
+Parameter | Description
+------------------------------|--------------------------------------
+`requestid`|**string**<br>A unique request id used for tracking the authentication request progress. Different from the one sent to the app.
+
+### Custom Errors
+
+No custom errors. Please see [#errors](#errors) for description of standard errors.
