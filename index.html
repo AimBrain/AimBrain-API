@@ -1363,7 +1363,7 @@ Voice token will automatically expire after 5 minutes.
 
 <p><code class="prettyprint">Content-Type: application/json</code></p>
 
-<p><strong>Endpoint:</strong> <code class="prettyprint">https://authenticator1.aimbrain.com/</code></p>
+<p><strong>Endpoint:</strong> <code class="prettyprint">https://authenticator.aimbrain.com/</code></p>
 
 <aside class="notice">
 HTTPS is required. AimBrain only responds to encrypted traffic so that your data remains safe.
@@ -1383,7 +1383,7 @@ HTTPS is required. AimBrain only responds to encrypted traffic so that your data
 <p>Example output:</p>
 </blockquote>
 
-<pre class="highlight shell"><code>curl -k https://authenticator1.aimbrain.com:443/v1/requests<span class="se">\</span>
+<pre class="highlight shell"><code>curl https://authenticator.aimbrain.com:443/v1/requests<span class="se">\</span>
     -H <span class="s1">'Content-Type: application/json'</span><span class="se">\</span>
     -H <span class="s1">'X-aimbrain-apikey: bank'</span><span class="se">\</span>
     -H <span class="s1">'X-aimbrain-signature: /1vf7VfMHoLPcKgRBqTqATpP16MqoyyA3e05SgxtSxQ='</span><span class="se">\</span>
@@ -1401,10 +1401,6 @@ HTTPS is required. AimBrain only responds to encrypted traffic so that your data
 
 <aside class="notice">
 Remember - in the examples you must replace <code>bank</code> with your personal API Key and <code>secret</code> with your personal API Secret.
-</aside>
-
-<aside class="notice">
-Because a self-signed certificate is used some tools might complain about it not passing verification.
 </aside>
 
 <h3 id="generating-x-aimbrain-signature">Generating X-aimbrain-signature</h3>
@@ -1431,7 +1427,7 @@ Because a self-signed certificate is used some tools might complain about it not
 <p>Alternatively:</p>
 </blockquote>
 
-<pre class="highlight shell"><code>curl -k https://authenticator1.aimbrain.com:443/v1/requests
+<pre class="highlight shell"><code>curl https://authenticator.aimbrain.com:443/v1/requests
     -H <span class="s1">'Content-Type: application/json'</span>
     -H <span class="s1">'X-aimbrain-apikey: bank'</span>
     -H <span class="s1">'X-aimbrain-signature: /1vf7VfMHoLPcKgRBqTqATpP16MqoyyA3e05SgxtSxQ='</span>
@@ -1463,7 +1459,7 @@ Because a self-signed certificate is used some tools might complain about it not
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">ids</code><br><span class="label notice">required</span></td>
-<td><strong>array of strings</strong><br>List of authenticator IDs that the client wants to push notification to. More than one usually represents multiple devices held by the customer.</td>
+<td><strong>array of strings</strong><br>List of authenticator IDs that the client wants to push notification to. More than one usually represents multiple devices held by the user.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">threshold</code><br><span class="label notice">required</span></td>
@@ -1475,7 +1471,7 @@ Because a self-signed certificate is used some tools might complain about it not
 </tr>
 <tr>
 <td><code class="prettyprint">attempts</code><br><span class="label notice">required</span></td>
-<td><strong>integer</strong><br>Number of attempts that the customer can fail authentication before considering the original authentication request as failed.</td>
+<td><strong>integer</strong><br>Number of attempts that the user can fail authentication before considering the original authentication request as failed.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">timeout</code><br><span class="label notice">required</span></td>
@@ -1490,7 +1486,7 @@ Because a self-signed certificate is used some tools might complain about it not
 <td><strong>string</strong><br>Summary to show the user when requesting authentication.</td>
 </tr>
 <tr>
-<td><code class="prettyprint">meta</code><br><span class="label notice">required</span></td>
+<td><code class="prettyprint">meta</code><br><span class="label notice">optional</span></td>
 <td><strong>string</strong><br>Custom field which will be included with response, limited to 1024 characters.</td>
 </tr>
 </tbody></table>
@@ -1513,7 +1509,7 @@ Because a self-signed certificate is used some tools might complain about it not
 
 <h3 id="custom-errors">Custom Errors</h3>
 
-<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+<p>No custom errors. Please see <a href="#errors23">#errors</a> for description of standard errors.</p>
 
 <h2 id="requests-requestid-status">/requests/REQUESTID/status</h2>
 
@@ -1529,7 +1525,7 @@ Because a self-signed certificate is used some tools might complain about it not
 <p>Alternatively:</p>
 </blockquote>
 
-<pre class="highlight shell"><code>curl -k https://authenticator1.aimbrain.com:443/v1/requests/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/status/
+<pre class="highlight shell"><code>curl https://authenticator.aimbrain.com:443/v1/requests/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/status/
     -H <span class="s1">'Content-Type: application/json'</span>
     -H <span class="s1">'X-aimbrain-apikey: bank'</span>
     -H <span class="s1">'X-aimbrain-signature: yqgQpOzesjoUeEbIsqVNRilxKHewn8vX40qA6TCPza8='</span>
@@ -1564,7 +1560,7 @@ Because a self-signed certificate is used some tools might complain about it not
 <span class="o">}</span>
 </code></pre>
 
-<p>Query for the authentication request progress.</p>
+<p>Query for the authentication request progress. Here the <code>REQUESTID</code> is the requestid from the <a href="#requests">/requests</a> call response.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -1572,7 +1568,7 @@ Because a self-signed certificate is used some tools might complain about it not
 
 <h3 id="body">Body</h3>
 
-<p>No body is required with this request. The request_id is passed through the URL.</p>
+<p>No body is required with this request. The requestid is passed through the URL.</p>
 
 <h3 id="http-response">HTTP Response</h3>
 
@@ -1718,7 +1714,7 @@ Because a self-signed certificate is used some tools might complain about it not
 
 <h3 id="custom-errors">Custom Errors</h3>
 
-<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+<p>No custom errors. Please see <a href="#errors23">#errors</a> for description of standard errors.</p>
 
 <h2 id="errors">Errors</h2>
 
