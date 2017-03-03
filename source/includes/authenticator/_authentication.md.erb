@@ -10,7 +10,7 @@ python2 curl_hmac_authenticator.py bank secret POST /v1/requests\
 > Example output:
 
 ```shell
-curl -k https://authenticator1.aimbrain.com:443/v1/requests\
+curl https://authenticator.aimbrain.com:443/v1/requests\
     -H 'Content-Type: application/json'\
     -H 'X-aimbrain-apikey: bank'\
     -H 'X-aimbrain-signature: /1vf7VfMHoLPcKgRBqTqATpP16MqoyyA3e05SgxtSxQ='\
@@ -28,10 +28,6 @@ To make development, testing and debugging easier we provide a [python tool for 
 
 <aside class="notice">
 Remember - in the examples you must replace <code>bank</code> with your personal API Key and <code>secret</code> with your personal API Secret.
-</aside>
-
-<aside class="notice">
-Because a self-signed certificate is used some tools might complain about it not passing verification.
 </aside>
 
 ### Generating X-aimbrain-signature

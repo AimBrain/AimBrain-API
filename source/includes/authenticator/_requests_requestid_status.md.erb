@@ -10,7 +10,7 @@ python2 curl_hmac_authenticator.py bank secret \
 > Alternatively:
 
 ```shell
-curl -k https://authenticator1.aimbrain.com:443/v1/requests/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/status/
+curl https://authenticator.aimbrain.com:443/v1/requests/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/status/
     -H 'Content-Type: application/json'
     -H 'X-aimbrain-apikey: bank'
     -H 'X-aimbrain-signature: yqgQpOzesjoUeEbIsqVNRilxKHewn8vX40qA6TCPza8='
@@ -44,14 +44,14 @@ curl -k https://authenticator1.aimbrain.com:443/v1/requests/xxxxxxxx-xxxx-xxxx-x
 }
 ```
 
-Query for the authentication request progress.
+Query for the authentication request progress. Here the <code>REQUESTID</code> is the requestid from the [/requests](#requests) call response.
 
 ### HTTP Request
 `POST /requests/REQUESTID/status`
 
 ### Body
 
-No body is required with this request. The request_id is passed through the URL.
+No body is required with this request. The requestid is passed through the URL.
 
 ### HTTP Response
 Status code: `200 OK`
@@ -101,4 +101,4 @@ Field | Description
 
 ### Custom Errors
 
-No custom errors. Please see [#errors](#errors) for description of standard errors.
+No custom errors. Please see [#errors](#errors23) for description of standard errors.
