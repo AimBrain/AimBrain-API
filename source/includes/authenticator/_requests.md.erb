@@ -36,7 +36,7 @@ Parameter | Description
 ------------------------------|--------------------------------------
 `ids`<br><span class="label notice">required</span>|**array of strings**<br>List of authenticator IDs that the client wants to push notification to. More than one usually represents multiple devices held by the user.
 `threshold`<br><span class="label notice">required</span>|**number**<br>Threshold (probability) of when we consider user successfully authenticated between 0..1. 0 - definitely not the user, 1 - definitely the user.
-`modules`<br><span class="label notice">required</span>|**array of integers**<br>A list of allowed modules for authentication (1 - face, 2 - voice).
+`modules`<br><span class="label notice">required</span>|**array of integers**<br>A list of allowed modules for authentication (0 - face, 1 - voice).
 `attempts`<br><span class="label notice">required</span>|**integer**<br>Number of attempts that the user can fail authentication before considering the original authentication request as failed.
 `timeout`<br><span class="label notice">required</span>|**integer**<br>A timeout, in Seconds, from the original authentication request after which it is considered as failed.
 `title`<br><span class="label notice">required</span>|**string**<br>Title to show the user when requesting authentication.
