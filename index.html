@@ -1237,10 +1237,6 @@ Voice token will automatically expire after 5 minutes.
 
 <p>This endpoint authenticates users based on the Voice Module.</p>
 
-<aside class="notice">
-  Liveliness detection is performed only if the voice sample was created by using the voice token created by <a href="#v1-voice-token">/v1/voice/token</a>.
-</aside>
-
 <h3 id="http-request">HTTP Request</h3>
 
 <p><code class="prettyprint">POST /v1/voice/auth</code></p>
@@ -1292,6 +1288,11 @@ Voice token will automatically expire after 5 minutes.
 <th>Action</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>460</td>
+<td>Voice Token for the authentication request was not found</td>
+<td>Confirm if <a href="#v1-voice-token">/v1/voice/token</a> was called before authenticating</td>
+</tr>
 <tr>
 <td>424</td>
 <td>Well formed request received, but we could not find an enrolled user with the supplied id</td>
