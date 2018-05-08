@@ -28,10 +28,6 @@ curl https://api.aimbrain.com:443/v1/voice/auth \
 
 This endpoint authenticates users based on the Voice Module.
 
-<aside class="notice">
-  Liveliness detection is performed only if the voice sample was created by using the voice token created by <a href="#v1-voice-token">/v1/voice/token</a>.
-</aside>
-
 ### HTTP Request
 `POST /v1/voice/auth`
 
@@ -54,6 +50,7 @@ Parameter | Description
 
 Code | Meaning | Action
 ---------- | ---------- | ----------
+460 | Voice Token for the authentication request was not found | Confirm if <a href="#v1-voice-token">/v1/voice/token</a> was called before authenticating
 424 | Well formed request received, but we could not find an enrolled user with the supplied id | Confirm if enrollnment was done for the specific user
 
 Please also see [#errors](#errors) for description of standard errors.
