@@ -132,6 +132,181 @@
 The AimBrain API is under active development. Breaking changes should be expected.
 </aside>
 
+          <h1 id="dashboard">Dashboard</h1>
+
+<p>The Dashboard for AimBrain On Demand allows you to create api-keys for your applications as well as debug the integrations.</p>
+
+<h2 id="quick-start-guide">Quick-start Guide</h2>
+
+<p>This guide will familiarise you with the concepts used in the AimBrain API and help you get started with the Dashboard</p>
+
+<h2 id="create-your-first-application">Create Your First Application</h2>
+
+<p>The first thing you need to do is create an Application. With AimBrain On Demand applications are an abstraction for a set of keys with specific permissions, each with its own event table.</p>
+
+<p><img alt="Create Application" src="images/quickstart-1.png" /></p>
+
+<p>Enter the name of your Application, which you&rsquo;ll use to find it in the dashboard, as well as keep the &ldquo;DEBUG&rdquo; box ticked. This will allow the events (api calls) to be stored in the dashboard. This functionality is meant to help with integarting AimBrain into your solutions.</p>
+
+<p><img alt="Name your Application" src="images/quickstart-2.png" /></p>
+
+<p>After your Application is created, select it from the applications list.</p>
+
+<p><img alt="Select your Application" src="images/quickstart-3.png" /></p>
+
+<h2 id="note-the-api-secret-key">Note the API Secret Key</h2>
+
+<p>From the top bar select <strong>&ldquo;Application Settings&rdquo;</strong></p>
+
+<p><img alt="Select Application Settings" src="images/quickstart-4.png" /></p>
+
+<p>On this page you can change your <strong>Application Name</strong> and check the <strong>API Secret Key</strong> and the <strong>Application Permissions</strong> (e.g. DEBUG). For now, we only care about the <strong>API Secret Key</strong>. It consists of the <strong>API Key</strong> and the <strong>API Secret</strong>. They are used in the authentication process against the API described <a href="#authentication">here</a>. It is <strong>critical</strong> to keep the <strong>API Secret</strong> secret.</p>
+
+<p><img alt="Note down your API Secret Key" src="images/quickstart-5.png" /></p>
+
+<h2 id="setup-the-aimbrain-cli">Setup the AimBrain CLI</h2>
+
+<p>The next step is downloading the AimBrain CLI tool.</p>
+
+<p>Example setup for Ubuntu (any recent version) including dependencies:</p>
+
+<p><code class="prettyprint">sudo apt-get -y install python git libsm-dev libxrender-dev</code><br>
+<code class="prettyprint">curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py</code><br>
+<code class="prettyprint">python get-pip.py</code><br>
+<code class="prettyprint">git clone https://github.com/aimbrain/aimbrain-cli.git</code><br>
+<code class="prettyprint">cd aimbrain-cli/</code><br>
+<code class="prettyprint">pip install . --no-cache-dir</code></p>
+
+<p>Example setup for Fedora including dependencies:</p>
+
+<p><code class="prettyprint">sudo yum -y install python git libSM-devel libXrender-devel libXext-devel</code><br>
+<code class="prettyprint">git clone https://github.com/aimbrain/aimbrain-cli.git</code><br>
+<code class="prettyprint">cd aimbrain-cli/</code><br>
+<code class="prettyprint">pip install . --no-cache-dir</code></p>
+
+<h2 id="download-the-example-images">Download the example images</h2>
+
+<p>Get the example images to use with the AimBrain CLI:</p>
+
+<p><code class="prettyprint">wget https://aimbrain.github.io/aimbrain-api/images/The_Hoff_1.jpg</code><br>
+<code class="prettyprint">wget https://aimbrain.github.io/aimbrain-api/images/The_Hoff_2.jpg</code><br>
+<code class="prettyprint">wget https://aimbrain.github.io/aimbrain-api/images/Pratt.jpg</code><br></p>
+
+<h2 id="use-the-aimbrain-cli">Use the AimBrain CLI</h2>
+
+<p>Now that you have all the tools and examples ready, you can use the AimBrain CLI with your own credentials (which you noted down <a href="#note-the-api-secret-key">here</a>).</p>
+
+<p>For this example we will use the <a href="#aimface">AimFace module</a>. You can see the full functionality of the AimBrain CLI tool by running <code class="prettyprint">aimbrain-cli --help</code>.</p>
+
+<p>To enroll a face within your application with the AimBrain CLI run:</p>
+
+<p><code class="prettyprint">aimbrain-cli enroll face The_Hoff_1.jpg \</code><br>
+<code class="prettyprint">--user-id=the-hoff \</code><br>
+<code class="prettyprint">--api-key=&lt;YOUR_API_KEY&gt; \</code><br>
+<code class="prettyprint">--secret=&lt;YOUR_API_SECRET&gt;</code></p>
+
+<p>The command you&rsquo;ll be using has 6 parameters:</p>
+
+<p><code class="prettyprint">enroll face</code> indicates which functionality you want to use (in this case face enrollment)</p>
+
+<p><code class="prettyprint">The_Hoff_1.jpg</code> indicates which image to use for the enrollment (subject to limits described <a href="#v1-face-enroll">here</a>)</p>
+
+<p><code class="prettyprint">--user-id=the-hoff</code> indicates the user ID for which the enrollment image will be used.</p>
+
+<p><code class="prettyprint">--api-key=&lt;YOUR_API_KEY&gt;</code> indicates your API Key from <a href="#note-the-api-secret-key">the step above</a></p>
+
+<p><code class="prettyprint">--secret=&lt;YOUR_API_SECRET&gt;</code> indicates your API Secret from <a href="#note-the-api-secret-key">the step above</a></p>
+
+<p>At this point you&rsquo;ll receive a response and some events will appear in your dashboard. To view them swith back to your dasboard and from the top bar select <strong>&ldquo;Events&rdquo;</strong></p>
+
+<p><img alt="View Events in the Dashboard" src="images/quickstart-6.png" /></p>
+
+<p>You should see two events there, one for the <strong>/v1/sessions</strong>(#v1-sessions) endpoint and one for <a href="#v1-face-enroll"><strong>/v1/face/enroll</strong></a>. There are a few things you can do here:</p>
+
+<p>You can download the media you submitted to the endpoint by clicking <strong>&ldquo;Download Media File&rdquo;</strong>. This can be helpful when debugging applications to see if, for example, the media sent is not corrupted.</p>
+
+<p><img alt="Download Media from the Dashboard" src="images/quickstart-7.png" /></p>
+
+<p>The other thing you can do is look at what responses were sent from the AimBrain API. You can do this by clicking the <strong>&ldquo;Response&rdquo;</strong> buttons.</p>
+
+<p><img alt="View Enrollment Events the Dashboard" src="images/quickstart-8.png" /></p>
+
+<h2 id="understanding-the-responses">Understanding the Responses</h2>
+
+<p>Example enrollment response using the AimBrain CLI:</p>
+
+<p><code class="prettyprint">[/v1/sessions][200][0.22s] {u&#39;behaviour&#39;: 0, u&#39;voice&#39;: 0, u&#39;session&#39;: u&#39;&lt;LONG_RANDOM_STRING&gt;&#39;, u&#39;face&#39;: 0}</code><br>
+<code class="prettyprint">[/v1/face/enroll][200][0.90s] {u&#39;imagesCount&#39;: 1}</code></p>
+
+<p>As mentioned above, two calls are made to the AimBrain API when using the AimBrain CLI to enroll a face. One to <a href="#v1-sessions"><strong>/v1/sessions</strong></a> and one to <a href="#v1-face-enroll"><strong>/v1/face/enroll</strong></a>.</p>
+
+<p>Every interaction with the AimBrain API begins with establishing a session. The responses let you know which Modules the user is enrolled for (for details on the response states please check the <a href="#v1-sessions"><strong>/v1/sessions</strong></a>) and proceed to either offer to enroll or authenticate. In our case, the response has <code class="prettyprint">&#39;face&#39;: 0</code> which means the user is not enrolled for face yet.</p>
+
+<p>The session call also returns a long session id string to be used in all further calls in this session. Each session can have multiple calls to other endpoints.</p>
+
+<p>The next step the AimBrain CLI did was send the media for enrollment to the face enrollment endpoint. The response <code class="prettyprint">&#39;imagesCount&#39;: 1</code> indicated that the image was of acceptable quality and was enrolled. This also returns a 200 HTTP code. In any other case, for example if image quality is poor (e.g. too dark) or no face is detected the AimBrain API returns 4xx errors (for details on the response states please check the <a href="#v1-face-enroll"><strong>/v1/face/enroll</strong></a>)</p>
+
+<p><img alt="View Enrollment Events the Dashboard" src="images/quickstart-9.png" /></p>
+
+<h2 id="other-examples">Other Examples</h2>
+
+<p>Now that we&rsquo;ve successfully enrolled a user we can try authenticating them. We can use the AimBrain CLI for that as well.</p>
+
+<p>To authenticate a face belonging to the same person using the AimBrain CLI run:</p>
+
+<p><code class="prettyprint">aimbrain-cli auth face The_Hoff_2.jpg \</code><br>
+<code class="prettyprint">--user-id=the-hoff \</code><br>
+<code class="prettyprint">--api-key=&lt;YOUR_API_KEY&gt; \</code><br>
+<code class="prettyprint">--secret=&lt;YOUR_API_SECRET&gt;</code></p>
+
+<p>The command you&rsquo;ll be using has 6 parameters:</p>
+
+<p><code class="prettyprint">auth face</code> indicates which functionality you want to use (in this case face authentication)</p>
+
+<p><code class="prettyprint">The_Hoff_2.jpg</code> indicates which image to use for the enrollment (subject to limits described <a href="#v1-face-auth">here</a>)</p>
+
+<p><code class="prettyprint">--user-id=the-hoff</code> indicates the user ID for which the enrollment image will be used. We are using the same user-id as above, as it is already enrolled.</p>
+
+<p><code class="prettyprint">--api-key=&lt;YOUR_API_KEY&gt;</code> indicates your API Key from <a href="#note-the-api-secret-key">the step above</a></p>
+
+<p><code class="prettyprint">--secret=&lt;YOUR_API_SECRET&gt;</code> indicates your API Secret from <a href="#note-the-api-secret-key">the step above</a></p>
+
+<p>Example authentication response using the AimBrain CLI:</p>
+
+<p><code class="prettyprint">[/v1/sessions][200][0.15s] {u&#39;behaviour&#39;: 0, u&#39;voice&#39;: 0, u&#39;session&#39;: u&#39;&lt;LONG_RANDOM_STRING&gt;&#39;, u&#39;face&#39;: 1}</code><br>
+<code class="prettyprint">[/v1/face/auth][200][0.64s] {u&#39;liveliness&#39;: 0, u&#39;score&#39;: 0.7880177}</code></p>
+
+<p>As with the example <a href="#understanding-the-responses">above</a> two calls are made. This time however the call to <a href="#v1-sessions"><strong>/v1/sessions</strong></a> returns <code class="prettyprint">&#39;face&#39;: 1</code>. This means this user can use <a href="#v1-face-auth"><strong>/v1/face/auth</strong></a> (otherwise there would be an error).</p>
+
+<p>The response from the authentication endpoint has two fields:</p>
+
+<p><code class="prettyprint">&#39;score&#39;: 0.7880177</code> which indicates the matching score. We recommend setting the authentication theshold to 0.5, meaning interpeting any score above 0.5 as a match. In this case, we can see there is a match.</p>
+
+<p><code class="prettyprint">&#39;liveliness&#39;: 0</code> which indicates that the media did not contain a video of the person performing a valid response. In this case it is 0 because we were using a photo. Currently the liveliness system is set up to check if the person is blinking or not.</p>
+
+<p><img alt="View Enrollment Events the Dashboard" src="images/quickstart-10.png" /></p>
+
+<p>Finally let&rsquo;s try authenticating an impostor.</p>
+
+<p>To authenticate a face belonging to a different person using the AimBrain CLI run:</p>
+
+<p><code class="prettyprint">aimbrain-cli auth face Pratt.jpg \</code><br>
+<code class="prettyprint">--user-id=the-hoff \</code><br>
+<code class="prettyprint">--api-key=&lt;YOUR_API_KEY&gt; \</code><br>
+<code class="prettyprint">--secret=&lt;YOUR_API_SECRET&gt;</code></p>
+
+<p>The only thing that changes from the example above is the image used, this time actually belonging to a different person.</p>
+
+<p>Example authentication response using the AimBrain CLI:</p>
+
+<p><code class="prettyprint">[/v1/sessions][200][0.20s] {u&#39;behaviour&#39;: 0, u&#39;voice&#39;: 0, u&#39;session&#39;: u&#39;&lt;LONG_RANDOM_STRING&gt;&#39;, u&#39;face&#39;: 1}</code></p>
+
+<p><code class="prettyprint">[/v1/face/auth][200][0.76s] {u&#39;liveliness&#39;: 0, u&#39;score&#39;: 0}</code></p>
+
+<p>As we can see from the response, we have <code class="prettyprint">&#39;score&#39;: 0</code> which indicates that the media definitelly does not match the enrolled user.</p>
+
+<p><img alt="View Enrollment Events the Dashboard" src="images/quickstart-11.png" /></p>
+
           <h1 id="modules">Modules</h1>
 
 <p>AimBrain supports <strong>multiple biometric modalities</strong> (modules) as part of its authentication platform. These modules can be used together (e.g. to <strong>step-up the authentication on high risk actions</strong>) or separately, depending on the specific use-case. Because AimBrain offers a public API, any module can be used in a <strong>cross-channel context</strong> (e.g. same Voice Module with mobile banking application and customer call center).</p>
@@ -140,7 +315,7 @@ The AimBrain API is under active development. Breaking changes should be expecte
 
 <p>At the core AimBrain uses advanced <strong>Deep Learning</strong> algorithms based on state of the art, PhD level, scientific research. The technology has <strong>multiple patents pending in UK and US</strong>.</p>
 
-<h2 id="behavioural">Behavioural</h2>
+<h2 id="aimbehaviour">AimBehaviour</h2>
 
 <p>With the behavioural modality AimBrain uses machine learning to track not <em>what</em> the user enters, but <em>how</em> they enter it.  AimBrain monitors features such as touch pressure, typing speed, as well as movement.</p>
 
@@ -150,7 +325,7 @@ The AimBrain API is under active development. Breaking changes should be expecte
 Behavioural tempalte is unique per (user id, device) tuple.
 </aside>
 
-<h2 id="facial">Facial</h2>
+<h2 id="aimface">AimFace</h2>
 
 <p>The technology works in <strong>mobile applications and online websites</strong>.</p>
 
@@ -160,7 +335,7 @@ Behavioural tempalte is unique per (user id, device) tuple.
 Facial template is unique user id.
 </aside>
 
-<h2 id="voice">Voice</h2>
+<h2 id="aimvoice">AimVoice</h2>
 
 <p>The technology is <strong>language agnostic</strong> and supports <strong>free speech as well as set-phrase authentication</strong>.</p>
 
@@ -287,7 +462,7 @@ The integration overview is provided as sequence diagrams below.</p>
 <li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#configuring-with-existing-session">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#request-serialisation">Android</a></li>
 </ol>
 
-<h3 id="behavioural">Behavioural</h3>
+<h3 id="aimbehaviour">AimBehaviour</h3>
 
 <p><img alt="AimBrain Production Architecture" src="images/integration_behavioural.png" /></p>
 
@@ -296,7 +471,7 @@ The integration overview is provided as sequence diagrams below.</p>
 <li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-behavioural-data-api-call">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-behavioural-data-submission-request">Android</a></li>
 </ol>
 
-<h3 id="facial">Facial</h3>
+<h3 id="aimface">AimFace</h3>
 
 <p><img alt="AimBrain Production Architecture" src="images/integration_face.png" /></p>
 
@@ -306,7 +481,7 @@ The integration overview is provided as sequence diagrams below.</p>
 <li>/face/auth or /face/enroll endpoint</li>
 </ol>
 
-<h3 id="voice">Voice</h3>
+<h3 id="aimvoice">AimVoice</h3>
 
 <p><img alt="AimBrain Production Architecture" src="images/integration_voice.png" /></p>
 
@@ -401,6 +576,7 @@ You MUST never share the API Secret parameter with other people. If it happened 
 <pre class="highlight shell"><code><span class="o">{</span>
     <span class="s2">"behaviour"</span>:0,
     <span class="s2">"face"</span>:0,
+    <span class="s2">"voice"</span>:0,
     <span class="s2">"session"</span>:<span class="s2">"test-user-test-user-1234567890-1459141412877914289"</span>
 <span class="o">}</span>
 </code></pre>
@@ -429,7 +605,7 @@ Session ID will automatically expire after 24 hours of the last API request asso
 </tr>
 <tr>
 <td><code class="prettyprint">device</code><br><span class="label notice">required</span></td>
-<td><strong>string</strong><br>User&rsquo;s device name used in the Behavioural Module and to calculate the precise accuracy by only testing between users with the same device.</td>
+<td><strong>string</strong><br>User&rsquo;s device name used in the AimBehaviour Module and to calculate the precise accuracy by only testing between users with the same device.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">system</code><br><span class="label notice">required</span></td>
@@ -461,11 +637,15 @@ Session ID will automatically expire after 24 hours of the last API request asso
 </tr>
 <tr>
 <td><code class="prettyprint">face</code></td>
-<td><strong>integer</strong><br>Status of the Facial Module for given user (see below).</td>
+<td><strong>integer</strong><br>Status of the AimFace Module for given user (see below).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">voice</code></td>
+<td><strong>integer</strong><br>Status of the AimVoice Module for given user (see below).</td>
 </tr>
 <tr>
 <td><code class="prettyprint">behaviour</code></td>
-<td><strong>integer</strong><br>Status of the Facial Module for given user and device pair (see below).</td>
+<td><strong>integer</strong><br>Status of the AimBehaviour Module for given user and device pair (see below).</td>
 </tr>
 </tbody></table>
 
@@ -484,6 +664,28 @@ Session ID will automatically expire after 24 hours of the last API request asso
 <tr>
 <td><code class="prettyprint">1</code></td>
 <td>User enrolled - facial authentication available.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">2</code></td>
+<td>Building template - enrollment done, AimBrain is building user template and no further action is required.</td>
+</tr>
+</tbody></table>
+
+<h3 id="voice-parameter-values"><code class="prettyprint">voice</code> parameter values:</h3>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">0</code></td>
+<td>User not enrolled - voice authentication not available, enrollment required.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">1</code></td>
+<td>User enrolled - voice authentication available.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">2</code></td>
@@ -544,7 +746,7 @@ Session ID will automatically expire after 24 hours of the last API request asso
 <span class="o">}</span>
 </code></pre>
 
-<p>This endpoint enrolls and authenticates users based on the Behavioural Module.</p>
+<p>This endpoint enrolls and authenticates users based on the AimBehaviour Module.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -754,7 +956,7 @@ The Behavioural Module starts in listen only mode. When integrated with new appl
 <span class="o">}</span>
 </code></pre>
 
-<p>This endpoint enrolls users based on the Facial Module.</p>
+<p>This endpoint enrolls users based on the AimFace Module.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -843,7 +1045,7 @@ The Behavioural Module starts in listen only mode. When integrated with new appl
 <span class="o">}</span>
 </code></pre>
 
-<p>This endpoint authenticates users based on the Facial Module.</p>
+<p>This endpoint authenticates users based on the AimFace Module.</p>
 
 <aside class="notice">
   Liveliness detection is performed only if videos are sent in `faces` and works by detecting blinking. In case custom implementation is done instead of using the SDK, we recommend adding prompts for users to blink if liveliness detection is required.
@@ -946,7 +1148,7 @@ The Behavioural Module starts in listen only mode. When integrated with new appl
 <span class="o">}</span>
 </code></pre>
 
-<p>This endpoint compares two faces based on the Facial Module.</p>
+<p>This endpoint compares two faces based on the AimFace Module.</p>
 
 <aside class="notice">
   Liveliness detection is performed only if videos are sent in `faces1`/`faces2` and works by detecting blinking. In case custom implementation is done instead of using the SDK, we recommend adding prompts for users to blink if liveliness detection is required.
@@ -1162,7 +1364,7 @@ Voice token will automatically expire after 5 minutes.
 <span class="o">}</span>
 </code></pre>
 
-<p>This endpoint enrolls users based on the Voice Module.</p>
+<p>This endpoint enrolls users based on the AimVoice Module.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -1235,7 +1437,7 @@ Voice token will automatically expire after 5 minutes.
 <span class="o">}</span>
 </code></pre>
 
-<p>This endpoint authenticates users based on the Voice Module.</p>
+<p>This endpoint authenticates users based on the AimVoice Module.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
