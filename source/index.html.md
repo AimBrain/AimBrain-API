@@ -14,6 +14,7 @@ toc_footers:
   - <a target="_blank" href='mailto://team@aimbrain.com'>Contact Us</a>
 
 includes:
+  - dashboard
   - modules
   - security
   - api_v1

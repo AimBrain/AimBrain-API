@@ -1,5 +1,174 @@
 # Dashboard
 
-generate new api keys, view debug info, etc.
+The Dashboard for AimBrain On Demand allows you to create api-keys for your applications as well as debug the integrations.
 
-notice: keys per application.
+## Quick-start Guide
+
+This guide will familiarise you with the concepts used in the AimBrain API and help you get started with the Dashboard
+
+## Create Your First Application
+
+The first thing you need to do is create an Application. With AimBrain On Demand applications are an abstraction for a set of keys with specific permissions, each with its own event table.
+
+![Create Application](images/quickstart-1.png)
+
+Enter the name of your Application, which you'll use to find it in the dashboard, as well as keep the "DEBUG" box ticked. This will allow the events (api calls) to be stored in the dashboard. This functionality is meant to help with integarting AimBrain into your solutions.
+
+![Name your Application](images/quickstart-2.png)
+
+After your Application is created, select it from the applications list.
+
+![Select your Application](images/quickstart-3.png)
+
+## Note the API Secret Key
+
+From the top bar select **"Application Settings"**
+
+![Select Application Settings](images/quickstart-4.png)
+
+On this page you can change your **Application Name** and check the **API Secret Key** and the **Application Permissions** (e.g. DEBUG). For now, we only care about the **API Secret Key**. It consists of the **API Key** and the **API Secret**. They are used in the authentication process against the API described [here](#authentication). It is **critical** to keep the **API Secret** secret.
+
+![Note down your API Secret Key](images/quickstart-5.png)
+
+## Setup the AimBrain CLI
+
+The next step is downloading the AimBrain CLI tool.
+
+Example setup for Ubuntu (any recent version) including dependencies:
+
+`sudo apt-get -y install python git libsm-dev libxrender-dev`<br>
+`curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`<br>
+`python get-pip.py`<br>
+`git clone https://github.com/aimbrain/aimbrain-cli.git`<br>
+`cd aimbrain-cli/`<br>
+`pip install . --no-cache-dir`
+
+Example setup for Fedora including dependencies:
+
+`sudo yum -y install python git libSM-devel libXrender-devel libXext-devel`<br>
+`git clone https://github.com/aimbrain/aimbrain-cli.git`<br>
+`cd aimbrain-cli/`<br>
+`pip install . --no-cache-dir`
+
+## Download the example images
+
+Get the example images to use with the AimBrain CLI:
+
+`wget https://aimbrain.github.io/aimbrain-api/images/The_Hoff_1.jpg`<br>
+`wget https://aimbrain.github.io/aimbrain-api/images/The_Hoff_2.jpg`<br>
+`wget https://aimbrain.github.io/aimbrain-api/images/Pratt.jpg`<br>
+
+## Use the AimBrain CLI
+
+Now that you have all the tools and examples ready, you can use the AimBrain CLI with your own credentials (which you noted down [here](#note-the-api-secret-key)).
+
+For this example we will use the [AimFace module](#aimface). You can see the full functionality of the AimBrain CLI tool by running `aimbrain-cli --help`.
+
+To enroll a face within your application with the AimBrain CLI run:
+
+`aimbrain-cli enroll face The_Hoff_1.jpg \`<br>
+`  --user-id=the-hoff \`<br>
+`  --api-key=<YOUR_API_KEY> \`<br>
+`  --secret=<YOUR_API_SECRET>`
+
+The command you'll be using has 6 parameters:
+
+`enroll face` indicates which functionality you want to use (in this case face enrollment)
+
+`The_Hoff_1.jpg` indicates which image to use for the enrollment (subject to limits described [here](#v1-face-enroll))
+
+`--user-id=the-hoff` indicates the user ID for which the enrollment image will be used.
+
+`--api-key=<YOUR_API_KEY>` indicates your API Key from [the step above](#note-the-api-secret-key)
+
+`--secret=<YOUR_API_SECRET>` indicates your API Secret from [the step above](#note-the-api-secret-key)
+
+At this point you'll receive a response and some events will appear in your dashboard. To view them swith back to your dasboard and from the top bar select **"Events"**
+
+![View Events in the Dashboard](images/quickstart-6.png)
+
+You should see two events there, one for the **/v1/sessions**(#v1-sessions) endpoint and one for [**/v1/face/enroll**](#v1-face-enroll). There are a few things you can do here:
+
+You can download the media you submitted to the endpoint by clicking **"Download Media File"**. This can be helpful when debugging applications to see if, for example, the media sent is not corrupted.
+
+![Download Media from the Dashboard](images/quickstart-7.png)
+
+The other thing you can do is look at what responses were sent from the AimBrain API. You can do this by clicking the **"Response"** buttons.
+
+![View Enrollment Events the Dashboard](images/quickstart-8.png)
+
+## Understanding the Responses
+
+Example enrollment response using the AimBrain CLI:
+
+`[/v1/sessions][200][0.22s] {u'behaviour': 0, u'voice': 0, u'session': u'<LONG_RANDOM_STRING>', u'face': 0}`<br>
+`[/v1/face/enroll][200][0.90s] {u'imagesCount': 1}`
+
+As mentioned above, two calls are made to the AimBrain API when using the AimBrain CLI to enroll a face. One to [**/v1/sessions**](#v1-sessions) and one to [**/v1/face/enroll**](#v1-face-enroll).
+
+Every interaction with the AimBrain API begins with establishing a session. The responses let you know which Modules the user is enrolled for (for details on the response states please check the [**/v1/sessions**](#v1-sessions)) and proceed to either offer to enroll or authenticate. In our case, the response has `'face': 0` which means the user is not enrolled for face yet.
+
+The session call also returns a long session id string to be used in all further calls in this session. Each session can have multiple calls to other endpoints.
+
+The next step the AimBrain CLI did was send the media for enrollment to the face enrollment endpoint. The response `'imagesCount': 1` indicated that the image was of acceptable quality and was enrolled. This also returns a 200 HTTP code. In any other case, for example if image quality is poor (e.g. too dark) or no face is detected the AimBrain API returns 4xx errors (for details on the response states please check the [**/v1/face/enroll**](#v1-face-enroll))
+
+![View Enrollment Events the Dashboard](images/quickstart-9.png)
+
+## Other Examples
+
+Now that we've successfully enrolled a user we can try authenticating them. We can use the AimBrain CLI for that as well.
+
+To authenticate a face belonging to the same person using the AimBrain CLI run:
+
+`aimbrain-cli auth face The_Hoff_2.jpg \`<br>
+`  --user-id=the-hoff \`<br>
+`  --api-key=<YOUR_API_KEY> \`<br>
+`  --secret=<YOUR_API_SECRET>`
+
+The command you'll be using has 6 parameters:
+
+`auth face` indicates which functionality you want to use (in this case face authentication)
+
+`The_Hoff_2.jpg` indicates which image to use for the enrollment (subject to limits described [here](#v1-face-auth))
+
+`--user-id=the-hoff` indicates the user ID for which the enrollment image will be used. We are using the same user-id as above, as it is already enrolled.
+
+`--api-key=<YOUR_API_KEY>` indicates your API Key from [the step above](#note-the-api-secret-key)
+
+`--secret=<YOUR_API_SECRET>` indicates your API Secret from [the step above](#note-the-api-secret-key)
+
+Example authentication response using the AimBrain CLI:
+
+`[/v1/sessions][200][0.15s] {u'behaviour': 0, u'voice': 0, u'session': u'<LONG_RANDOM_STRING>', u'face': 1}`<br>
+`[/v1/face/auth][200][0.64s] {u'liveliness': 0, u'score': 0.7880177}`
+
+As with the example [above](#understanding-the-responses) two calls are made. This time however the call to [**/v1/sessions**](#v1-sessions) returns `'face': 1`. This means this user can use [**/v1/face/auth**](#v1-face-auth) (otherwise there would be an error).
+
+The response from the authentication endpoint has two fields:
+
+`'score': 0.7880177` which indicates the matching score. We recommend setting the authentication theshold to 0.5, meaning interpeting any score above 0.5 as a match. In this case, we can see there is a match.
+
+`'liveliness': 0` which indicates that the media did not contain a video of the person performing a valid response. In this case it is 0 because we were using a photo. Currently the liveliness system is set up to check if the person is blinking or not.
+
+![View Enrollment Events the Dashboard](images/quickstart-10.png)
+
+Finally let's try authenticating an impostor.
+
+To authenticate a face belonging to a different person using the AimBrain CLI run:
+
+`aimbrain-cli auth face Pratt.jpg \`<br>
+`  --user-id=the-hoff \`<br>
+`  --api-key=<YOUR_API_KEY> \`<br>
+`  --secret=<YOUR_API_SECRET>`
+
+The only thing that changes from the example above is the image used, this time actually belonging to a different person.
+
+Example authentication response using the AimBrain CLI:
+
+`[/v1/sessions][200][0.20s] {u'behaviour': 0, u'voice': 0, u'session': u'<LONG_RANDOM_STRING>', u'face': 1}`
+
+`[/v1/face/auth][200][0.76s] {u'liveliness': 0, u'score': 0}`
+
+As we can see from the response, we have `'score': 0` which indicates that the media definitelly does not match the enrolled user.
+
+![View Enrollment Events the Dashboard](images/quickstart-11.png)

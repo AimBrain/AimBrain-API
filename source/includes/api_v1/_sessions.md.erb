@@ -23,6 +23,7 @@ curl https://api.aimbrain.com:443/v1/sessions \
 {
     "behaviour":0,
     "face":0,
+    "voice":0,
     "session":"test-user-test-user-1234567890-1459141412877914289"
 }
 ```
@@ -41,7 +42,7 @@ Session ID will automatically expire after 24 hours of the last API request asso
 Parameter | Description
 -------------------------------|--------------------------------------
 `userId`<br><span class="label notice">required</span> | **string**<br>Random anonymous static ID used to identify app users.
-`device`<br><span class="label notice">required</span> | **string**<br>User's device name used in the Behavioural Module and to calculate the precise accuracy by only testing between users with the same device.
+`device`<br><span class="label notice">required</span> | **string**<br>User's device name used in the AimBehaviour Module and to calculate the precise accuracy by only testing between users with the same device.
 `system`<br><span class="label notice">required</span> | **string**<br>Operating system's name and version used for tracking SDK’s usage statistics.
 `screenHeight`<br><span class="label notice">required</span> | **integer**<br>User's device screen height (px).
 `screenWidth`<br><span class="label notice">required</span> | **integer**<br>User's device screen width (px).
@@ -52,12 +53,17 @@ Status code: `200 OK`
 Parameter | Description
 ------------------------------|--------------------------------------
 `session`|**string**<br>Generated session id for use with other API requests to maintain session semantics.
-`face`|**integer**<br>Status of the Facial Module for given user (see below).
-`behaviour`|**integer**<br>Status of the Facial Module for given user and device pair (see below).
+`face`|**integer**<br>Status of the AimFace Module for given user (see below).
+`voice`|**integer**<br>Status of the AimVoice Module for given user (see below).
+`behaviour`|**integer**<br>Status of the AimBehaviour Module for given user and device pair (see below).
 
 ### `face` parameter values:
 
 <%= partial "includes/api_v1/facial_module_states" %>
+
+### `voice` parameter values:
+
+<%= partial "includes/api_v1/voice_module_states" %>
 
 ### `behaviour` parameter values:
 
