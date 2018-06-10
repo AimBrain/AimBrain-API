@@ -1,0 +1,57 @@
+## /v1/face/token
+
+> Download [face_token_request_example_body.json](examples/api_v1/face_token_request_example_body.json) and use:
+
+```shell
+python2 curl_hmac.py test secret POST /v1/face/token \
+    -f 'face_token_request_example_body.json' -r
+```
+
+> Alternatively:
+
+```shell
+curl https://api.aimbrain.com:443/v1/face/token \
+    -H 'Content-Type: application/json' \
+    -H 'X-aimbrain-apikey: test' \
+    -H 'X-aimbrain-signature: 9Dh+ODTM0YQ7ACEW+n+0B0I2NFBOmyRc21UyZ94J3+Q=' \
+    --data @face_token_request_example_body.json
+```
+
+> Example response:
+
+```shell
+{
+    "token":"6-6-7"
+}
+```
+
+This endpoint a token to be displayed during face/lipsync recording.
+
+<aside class="notice">
+Face token will automatically expire after 5 minutes.
+</aside>
+
+### HTTP Request
+`POST /v1/face/token`
+
+### Body
+
+Parameter | Description
+-------------------------------|--------------------------------------
+`session`<br><span class="label notice">required</span>|**string**<br>Current Session ID as returned by [/v1/sessions](#v1-sessions) request.
+`tokentype`<br><span class="label notice">required</span> | **string**<br>The type of token to be returned.
+
+### HTTP Response
+Status code: `200 OK`
+
+Parameter | Description
+------------------------------|--------------------------------------
+`token`|**string**<br>The token to be displayed during face/lipsync recording.
+
+### `tokentype` parameter values:
+
+<%= partial "includes/api_v1/tokentype_values" %>
+
+### Custom Errors
+
+No custom errors. Please see [#errors](#errors) for description of standard errors.

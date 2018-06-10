@@ -24,9 +24,17 @@ In these sequence diagrams interactions between the following components are sho
 ### AimFace
 ![AimBrain Production Architecture](images/integration_face.png)
 
-1. [iOS](https://github.com/aimbrain/aimbrain-ios-sdk#recording-video-of-the-users-face), [Android](https://github.com/aimbrain/aimbrain-android-sdk#recording-video-of-users-face)
+1. [iOS](https://github.com/aimbrain/aimbrain-ios-sdk#recording-video-of-the-user-face), [Android](https://github.com/aimbrain/aimbrain-android-sdk#recording-video-of-user-face)
 2. [iOS auth](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-authentication-calls), [iOS enroll](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-enroll-calls), [Android auth](https://github.com/aimbrain/aimbrain-android-sdk#serialising-authentication-with-the-facial-module), [Android enroll](https://github.com/aimbrain/aimbrain-android-sdk#serialising-enrolling-with-the-facial-module-request)
 3. /face/auth or /face/enroll endpoint
+
+### AimFace/LipSync
+![AimBrain Production Architecture](images/integration_lipsync.png)
+
+1. [iOS](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-face-token-call), [Android](https://github.com/aimbrain/aimbrain-android-sdk#serialising-face-token-request-call)
+2. [iOS](https://github.com/aimbrain/aimbrain-ios-sdk#recording-and-using-video-with-face-token), [Android](https://github.com/aimbrain/aimbrain-android-sdk#recording-video-of-user-face-with-audio-included)
+3. [iOS auth](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-authentication-calls), [iOS enroll](https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-enroll-calls), [Android auth](https://github.com/aimbrain/aimbrain-android-sdk#serialising-authentication-with-the-facial-module), [Android enroll](https://github.com/aimbrain/aimbrain-android-sdk#serialising-enrolling-with-the-facial-module-request)
+4. /face/auth or /face/enroll endpoint
 
 ### AimVoice
 ![AimBrain Production Architecture](images/integration_voice.png)

@@ -29,7 +29,9 @@ curl https://api.aimbrain.com:443/v1/face/auth \
 This endpoint authenticates users based on the AimFace Module.
 
 <aside class="notice">
-  Liveliness detection is performed only if videos are sent in `faces` and works by detecting blinking. In case custom implementation is done instead of using the SDK, we recommend adding prompts for users to blink if liveliness detection is required.
+  Default liveliness detection is performed only if videos are sent in `faces` and works by detecting blinking. In case custom implementation is done instead of using the SDK, we recommend adding prompts for users to blink if liveliness detection is required.<br>
+  <br>
+  In case of using LipSync for liveliness detection, <a href="#v1-face-token">/v1/face/token</a> needs to be called first.
 </aside>
 
 ### HTTP Request
