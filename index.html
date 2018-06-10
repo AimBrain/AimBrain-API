@@ -476,7 +476,18 @@ The integration overview is provided as sequence diagrams below.</p>
 <p><img alt="AimBrain Production Architecture" src="images/integration_face.png" /></p>
 
 <ol>
-<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#recording-video-of-the-users-face">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#recording-video-of-users-face">Android</a></li>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#recording-video-of-the-user-face">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#recording-video-of-user-face">Android</a></li>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-authentication-calls">iOS auth</a>, <a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-enroll-calls">iOS enroll</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-authentication-with-the-facial-module">Android auth</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-enrolling-with-the-facial-module-request">Android enroll</a></li>
+<li>/face/auth or /face/enroll endpoint</li>
+</ol>
+
+<h3 id="aimface-lipsync">AimFace/LipSync</h3>
+
+<p><img alt="AimBrain Production Architecture" src="images/integration_lipsync.png" /></p>
+
+<ol>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-face-token-call">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-face-token-request-call">Android</a></li>
+<li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#recording-and-using-video-with-face-token">iOS</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#recording-video-of-user-face-with-audio-included">Android</a></li>
 <li><a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-authentication-calls">iOS auth</a>, <a href="https://github.com/aimbrain/aimbrain-ios-sdk#serialising-facial-module-enroll-calls">iOS enroll</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-authentication-with-the-facial-module">Android auth</a>, <a href="https://github.com/aimbrain/aimbrain-android-sdk#serialising-enrolling-with-the-facial-module-request">Android enroll</a></li>
 <li>/face/auth or /face/enroll endpoint</li>
 </ol>
@@ -926,6 +937,118 @@ The Behavioural Module starts in listen only mode. When integrated with new appl
 
 <p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
 
+<h2 id="v1-face-token">/v1/face/token</h2>
+
+<blockquote>
+<p>Download <a href="examples/api_v1/face_token_request_example_body.json">face_token_request_example_body.json</a> and use:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/face/token <span class="se">\</span>
+    -f <span class="s1">'face_token_request_example_body.json'</span> -r
+</code></pre>
+
+<blockquote>
+<p>Alternatively:</p>
+</blockquote>
+
+<pre class="highlight shell"><code>curl https://api.aimbrain.com:443/v1/face/token <span class="se">\</span>
+    -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-apikey: test'</span> <span class="se">\</span>
+    -H <span class="s1">'X-aimbrain-signature: 9Dh+ODTM0YQ7ACEW+n+0B0I2NFBOmyRc21UyZ94J3+Q='</span> <span class="se">\</span>
+    --data @face_token_request_example_body.json
+</code></pre>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"token"</span>:<span class="s2">"6-6-7"</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>This endpoint a token to be displayed during face/lipsync recording.</p>
+
+<aside class="notice">
+Face token will automatically expire after 5 minutes.
+</aside>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /v1/face/token</code></p>
+
+<h3 id="body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">session</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Current Session ID as returned by <a href="#v1-sessions">/v1/sessions</a> request.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">tokentype</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>The type of token to be returned.</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">token</code></td>
+<td><strong>string</strong><br>The token to be displayed during face/lipsync recording.</td>
+</tr>
+</tbody></table>
+
+<h3 id="tokentype-parameter-values"><code class="prettyprint">tokentype</code> parameter values:</h3>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">enroll-1</code></td>
+<td>Token type to be used during the first enrollment step.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">enroll-2</code></td>
+<td>Token type to be used during the second enrollment step.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">enroll-3</code></td>
+<td>Token type to be used during the third enrollment step.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">enroll-4</code></td>
+<td>Token type to be used during the fourth enrollment step.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">enroll-5</code></td>
+<td>Token type to be used during the fifth enrollment step.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">auth</code></td>
+<td>Token type to be used during authentication.</td>
+</tr>
+</tbody></table>
+
+<h3 id="custom-errors">Custom Errors</h3>
+
+<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+
 <h2 id="v1-face-enroll">/v1/face/enroll</h2>
 
 <blockquote>
@@ -1048,7 +1171,9 @@ The Behavioural Module starts in listen only mode. When integrated with new appl
 <p>This endpoint authenticates users based on the AimFace Module.</p>
 
 <aside class="notice">
-  Liveliness detection is performed only if videos are sent in `faces` and works by detecting blinking. In case custom implementation is done instead of using the SDK, we recommend adding prompts for users to blink if liveliness detection is required.
+  Default liveliness detection is performed only if videos are sent in `faces` and works by detecting blinking. In case custom implementation is done instead of using the SDK, we recommend adding prompts for users to blink if liveliness detection is required.<br>
+  <br>
+  In case of using LipSync for liveliness detection, <a href="#v1-face-token">/v1/face/token</a> needs to be called first.
 </aside>
 
 <h3 id="http-request">HTTP Request</h3>
