@@ -42,7 +42,7 @@ This endpoint authenticates users based on the AimFace Module.
 Parameter | Description
 ------------------------------|--------------------------------------
 `session`<br><span class="label notice">required</span>|**string**<br>Current Session ID as returned by [/v1/sessions](#v1-sessions) request.
-`faces`<br><span class="label notice">required</span>|**array of strings**<br>List of base64 encoded images or videos containing user face. H.264 encoded videos, JPEG and PNG formats supported. 640x480 maximum resolution, 500kB maximum size. In case of video, no longer than 3 seconds.
+`faces`<br><span class="label notice">required</span>|**array of strings**<br>List of base64 encoded images or videos containing user face. H.264 encoded videos and JPEG formats supported. 640x480 maximum resolution, 500kB maximum size. In case of video, no longer than 3 seconds.
 
 ### HTTP Response
 Status code: `200 OK`
