@@ -308,6 +308,12 @@
 
 <p>At the core AimBrain uses advanced <strong>Deep Learning</strong> algorithms based on state of the art, PhD level, scientific research. The technology has <strong>multiple patents granted and pending in UK and US</strong>.</p>
 
+<h2 id="aimanomaly">AimAnomaly</h2>
+
+<p>With the AimAnomaly module AimBrain flags abnormalities than could signal fraud, from the large scale right down to the manual onboarding stage. Even if you haven’t pinpointed the data patterns yet, we help you isolate and immobilise fraud, before it gets let in the door.</p>
+
+<p>The technology works in <strong>mobile applications and websites</strong>.</p>
+
 <h2 id="aimbehaviour">AimBehaviour</h2>
 
 <p>With the behavioural modality AimBrain uses machine learning to track not <em>what</em> the user enters, but <em>how</em> they enter it.  AimBrain monitors features such as touch pressure, typing speed, as well as movement.</p>
@@ -552,6 +558,133 @@ You MUST never share the API Secret parameter with other people. If it happened 
 
 <p><code class="prettyprint">message = uppercase_http_method + &#39;\n&#39; + lovercase_endpoint + &#39;\n&#39; + request_body</code>.</p>
 
+<h2 id="v1-behavioural-submit">/v1/behavioural/submit</h2>
+
+<p>This endpoint sends behavioural data to the AimBrain backend to be used for the AimAnomaly score with the <a href="#v1-score">/v1/score</a> call.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /v1/behavioural/submit</code></p>
+
+<h3 id="body">Body</h3>
+
+<p>The data collection for AimAnomaly is facilitated by the SDKs and is application dependent. Data such as touch/type events, swipe/mouse movement events and accelerometer readings is gathered and sent.</p>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<h3 id="errors">Errors</h3>
+
+<p>Please see <a href="#errors">#errors</a> for description of errors and formatting.</p>
+
+<h2 id="v1-score">/v1/score</h2>
+
+<blockquote>
+<p>Example response:</p>
+</blockquote>
+
+<pre class="highlight shell"><code><span class="o">{</span>
+    <span class="s2">"session"</span>:<span class="s2">"test-session"</span>,
+    <span class="s2">"metadata"</span>:[],
+    <span class="s2">"scores"</span>:[
+        <span class="o">{</span>
+            <span class="s2">"version"</span>:<span class="s2">"1.0.0"</span>,
+            <span class="s2">"type"</span>:<span class="s2">"test-model"</span>,
+            <span class="s2">"value"</span>:1.0
+        <span class="o">}</span>
+    <span class="o">]</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>This endpoint returns the AimAnomaly score for the session.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST /v1/score</code></p>
+
+<h3 id="body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">session</code><br><span class="label notice">required</span></td>
+<td><strong>string</strong><br>Current Session ID.</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-response">HTTP Response</h3>
+
+<p>Status code: <code class="prettyprint">200 OK</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">session</code></td>
+<td><strong>string</strong><br>Current Session ID.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">metadata</code></td>
+<td><strong>array of objects</strong><br>Metadata associated with the session.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">scores</code></td>
+<td><strong>array of objects</strong><br>Scores associated with the session.</td>
+</tr>
+</tbody></table>
+
+<h3 id="metadata-object"><code class="prettyprint">metadata</code> object:</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">name</code></td>
+<td><strong>string</strong><br>Name of the metadata object (application specific).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">value</code></td>
+<td><strong>string</strong><br>Value of the metadata object (application specific).</td>
+</tr>
+</tbody></table>
+
+<h3 id="scores-object"><code class="prettyprint">scores</code> object:</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">version</code></td>
+<td><strong>string</strong><br>Version of the scoring process used for this score object.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">type</code></td>
+<td><strong>string</strong><br>Type of the scoring process used for this score object.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">value</code></td>
+<td><strong>float</strong><br>Score returned by the scoring process in the range [0..1].</td>
+</tr>
+</tbody></table>
+
+<h3 id="errors">Errors</h3>
+
+<p>Please see <a href="#errors">#errors</a> for description of errors and formatting.</p>
+
 <h2 id="v1-sessions">/v1/sessions</h2>
 
 <blockquote>
@@ -588,7 +721,7 @@ You MUST never share the API Secret parameter with other people. If it happened 
 <p>This endpoint creates a server-side session and returns unique session id to be used with further API requests.</p>
 
 <aside class="notice">
-Session ID will automatically expire after 24 hours of the last API request associated with that session.
+Session ID will automatically expire after 2 hours of the last API request associated with that session.
 </aside>
 
 <h3 id="http-request">HTTP Request</h3>
@@ -715,30 +848,11 @@ Session ID will automatically expire after 24 hours of the last API request asso
 </tr>
 </tbody></table>
 
-<h3 id="custom-errors">Custom Errors</h3>
+<h3 id="errors">Errors</h3>
 
-<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+<p>Please see <a href="#errors">#errors</a> for description of errors and formatting.</p>
 
 <h2 id="v1-behavioural">/v1/behavioural</h2>
-
-<blockquote>
-<p>Download <a href="examples/api_v1/behavioural_request_example_body.json">behavioural_request_example_body.json</a> and use:</p>
-</blockquote>
-
-<pre class="highlight shell"><code>python2 curl_hmac.py <span class="nb">test </span>secret POST /v1/behavioural <span class="se">\</span>
-    -f <span class="s1">'behavioural_request_example_body.json'</span> -r
-</code></pre>
-
-<blockquote>
-<p>Alternatively:</p>
-</blockquote>
-
-<pre class="highlight shell"><code>curl https://api.aimbrain.com:443/v1/behavioural <span class="se">\</span>
-    -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
-    -H <span class="s1">'X-aimbrain-apikey: test'</span> <span class="se">\</span>
-    -H <span class="s1">'X-aimbrain-signature: TgDm+IwKlW3H3ILdB3ga0OOZGgZab4gM/9nW+X4NSHw='</span> <span class="se">\</span>
-    --data @behavioural_request_example_body.json
-</code></pre>
 
 <blockquote>
 <p>Example response:</p>
@@ -758,131 +872,7 @@ Session ID will automatically expire after 24 hours of the last API request asso
 
 <h3 id="body">Body</h3>
 
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code class="prettyprint">session</code><br><span class="label notice">required</span></td>
-<td><strong>string</strong><br>Current Session ID as returned by <a href="#v1-sessions">/v1/sessions</a> request.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">touches</code><br><span class="label notice">required</span></td>
-<td><strong>array of objects</strong><br>List of touch events (see below).</td>
-</tr>
-<tr>
-<td><code class="prettyprint">accelerations</code><br><span class="label notice">required</span></td>
-<td><strong>array of objects</strong><br>List of accelerometer events (see below).</td>
-</tr>
-<tr>
-<td><code class="prettyprint">textEvents</code><br><span class="label notice">required</span></td>
-<td><strong>array of objects</strong><br>List of text change / typing events (see below).</td>
-</tr>
-</tbody></table>
-
-<h3 id="touches-object"><code class="prettyprint">touches</code> object:</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code class="prettyprint">tid</code><br><span class="label notice">required</span></td>
-<td><strong>integer</strong><br>Touch id as reported by the system (e.g. <a href="https://developer.android.com/reference/android/view/MotionEvent.html#getPointerId(int)">MotionEvent.getPointerId(int)</a>) for Android</td>
-</tr>
-<tr>
-<td><code class="prettyprint">p</code><br><span class="label notice">required</span></td>
-<td><strong>integer</strong><br>Phase or action for the touch event, where: <code class="prettyprint">0</code> - Began, <code class="prettyprint">1</code> - Moved, <code class="prettyprint">2</code> - Stationary, <code class="prettyprint">3</code> - Ended, <code class="prettyprint">4</code> - Cancelled.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">t</code><br><span class="label notice">required</span></td>
-<td><strong>integer</strong><br>The the time (in ms) when this specific event was generated.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">x</code><br><span class="label notice">required</span></td>
-<td><strong>integer</strong><br>Absolute X coordinate for the touch position (for elements tagged as sensitive MUST be reported as “0”).</td>
-</tr>
-<tr>
-<td><code class="prettyprint">y</code><br><span class="label notice">required</span></td>
-<td><strong>integer</strong><br>Absolute X coordinate for the touch position (for elements tagged as sensitive MUST be reported as “0”).</td>
-</tr>
-<tr>
-<td><code class="prettyprint">rx</code><br><span class="label notice">required</span></td>
-<td><strong>integer</strong><br>Relative X coordinate to the event element (e.g. button).</td>
-</tr>
-<tr>
-<td><code class="prettyprint">ry</code><br><span class="label notice">required</span></td>
-<td><strong>integer</strong><br>Relative Y coordinate to the event element (e.g. button).</td>
-</tr>
-<tr>
-<td><code class="prettyprint">r</code><br><span class="label notice">required</span></td>
-<td><strong>float</strong><br>Approximate size of touch area for the given touch id.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">f</code><br><span class="label notice">required</span></td>
-<td><strong>float</strong><br>Force of pressure of touch for the given event.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">ids</code><br><span class="label notice">required</span></td>
-<td><strong>array of strings</strong><br>List of identifiers of views in the order that touch event is propagating (for elements tagged as sensitive it MUST be reported as a hash of element id + locally generated salt which never leaves the user’s device).</td>
-</tr>
-</tbody></table>
-
-<h3 id="accelerations-object"><code class="prettyprint">accelerations</code> object:</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code class="prettyprint">t</code><br><span class="label notice">required</span></td>
-<td><strong>integer</strong><br>The the time (in ms) when this specific event was generated.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">x</code><br><span class="label notice">required</span></td>
-<td><strong>float</strong><br>Acceleration in X direction.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">y</code><br><span class="label notice">required</span></td>
-<td><strong>float</strong><br>Acceleration in Y direction.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">z</code><br><span class="label notice">required</span></td>
-<td><strong>float</strong><br>Acceleration in Z direction.</td>
-</tr>
-</tbody></table>
-
-<aside class="notice">
-Accelerometer readings MUST be sampled at around 100Hz frequency and for at least 500ms after the last observed touch event.
-</aside>
-
-<h3 id="textevents-object"><code class="prettyprint">textEvents</code> object:</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code class="prettyprint">t</code><br><span class="label notice">required</span></td>
-<td><strong>integer</strong><br>The the time (in ms) when this specific event was generated.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">tx</code><br><span class="label notice">required</span></td>
-<td><strong>string</strong><br>Full text after the event / change.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">ids</code><br><span class="label notice">required</span></td>
-<td><strong>array of strings</strong><br>List of identifiers of views in the order that touch event is propagating (for elements tagged as sensitive it MUST be reported as a hash of element id + locally generated salt which never leaves the user’s device).</td>
-</tr>
-</tbody></table>
+<p>The data collection for AimBehaviour is facilitated by the SDKs and is application dependent. Data such as touch/type events, swipe/mouse movement events and accelerometer readings is gathered and sent.</p>
 
 <h3 id="http-response">HTTP Response</h3>
 
@@ -926,9 +916,9 @@ Accelerometer readings MUST be sampled at around 100Hz frequency and for at leas
 The Behavioural Module starts in listen only mode. When integrated with new applications the endpoint will return score and status as 0.0 and 0 respectively until a sufficient number of interactions is reached.
 </aside>
 
-<h3 id="custom-errors">Custom Errors</h3>
+<h3 id="errors">Errors</h3>
 
-<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+<p>Please see <a href="#errors">#errors</a> for description of errors and formatting.</p>
 
 <h2 id="v1-face-token">/v1/face/token</h2>
 
@@ -1038,9 +1028,9 @@ Face token will automatically expire after 5 minutes.
 </tr>
 </tbody></table>
 
-<h3 id="custom-errors">Custom Errors</h3>
+<h3 id="errors">Errors</h3>
 
-<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+<p>Please see <a href="#errors">#errors</a> for description of errors and formatting.</p>
 
 <h2 id="v1-face-enroll">/v1/face/enroll</h2>
 
@@ -1112,23 +1102,9 @@ Face token will automatically expire after 5 minutes.
 </tr>
 </tbody></table>
 
-<h3 id="custom-errors">Custom Errors</h3>
+<h3 id="errors">Errors</h3>
 
-<table><thead>
-<tr>
-<th>Code</th>
-<th>Meaning</th>
-<th>Action</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>422</td>
-<td>Well formed request received, but images were not accepted (reason specified in <code class="prettyprint">error</code> field)</td>
-<td>Capture a NEW set of images and try again</td>
-</tr>
-</tbody></table>
-
-<p>Please also see <a href="#errors">#errors</a> for description of standard errors.</p>
+<p>Please see <a href="#errors">#errors</a> for description of errors and formatting.</p>
 
 <h2 id="v1-face-auth">/v1/face/auth</h2>
 
@@ -1211,28 +1187,9 @@ Face token will automatically expire after 5 minutes.
 </tr>
 </tbody></table>
 
-<h3 id="custom-errors">Custom Errors</h3>
+<h3 id="errors">Errors</h3>
 
-<table><thead>
-<tr>
-<th>Code</th>
-<th>Meaning</th>
-<th>Action</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>422</td>
-<td>Well formed request received, but images were not accepted (reason specified in <code class="prettyprint">error</code> field)</td>
-<td>Capture a NEW set of images and try again</td>
-</tr>
-<tr>
-<td>424</td>
-<td>Well formed request received, but we could not find an enrolled user with the supplied id</td>
-<td>Confirm if enrollnment was done for the specific user</td>
-</tr>
-</tbody></table>
-
-<p>Please also see <a href="#errors">#errors</a> for description of standard errors.</p>
+<p>Please see <a href="#errors">#errors</a> for description of errors and formatting.</p>
 
 <h2 id="v1-face-compare">/v1/face/compare</h2>
 
@@ -1322,23 +1279,9 @@ No images are stored server-side for this request.
 </tr>
 </tbody></table>
 
-<h3 id="custom-errors">Custom Errors</h3>
+<h3 id="errors">Errors</h3>
 
-<table><thead>
-<tr>
-<th>Code</th>
-<th>Meaning</th>
-<th>Action</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>422</td>
-<td>Well formed request received, but images were not accepted (reason specified in <code class="prettyprint">error</code> field)</td>
-<td>Capture a NEW set of images and try again</td>
-</tr>
-</tbody></table>
-
-<p>Please also see <a href="#errors">#errors</a> for description of standard errors.</p>
+<p>Please see <a href="#errors">#errors</a> for description of errors and formatting.</p>
 
 <h2 id="v1-voice-token">/v1/voice/token</h2>
 
@@ -1448,9 +1391,9 @@ Voice token will automatically expire after 5 minutes.
 </tr>
 </tbody></table>
 
-<h3 id="custom-errors">Custom Errors</h3>
+<h3 id="errors">Errors</h3>
 
-<p>No custom errors. Please see <a href="#errors">#errors</a> for description of standard errors.</p>
+<p>Please see <a href="#errors">#errors</a> for description of errors and formatting.</p>
 
 <h2 id="v1-voice-enroll">/v1/voice/enroll</h2>
 
@@ -1522,7 +1465,9 @@ Voice token will automatically expire after 5 minutes.
 </tr>
 </tbody></table>
 
-<p>Please also see <a href="#errors">#errors</a> for description of standard errors.</p>
+<h3 id="errors">Errors</h3>
+
+<p>Please see <a href="#errors">#errors</a> for description of errors and formatting.</p>
 
 <h2 id="v1-voice-auth">/v1/voice/auth</h2>
 
@@ -1599,28 +1544,9 @@ Voice token will automatically expire after 5 minutes.
 </tr>
 </tbody></table>
 
-<h3 id="custom-errors">Custom Errors</h3>
+<h3 id="errors">Errors</h3>
 
-<table><thead>
-<tr>
-<th>Code</th>
-<th>Meaning</th>
-<th>Action</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>460</td>
-<td>Voice Token for the authentication request was not found</td>
-<td>Confirm if <a href="#v1-voice-token">/v1/voice/token</a> was called before authenticating</td>
-</tr>
-<tr>
-<td>424</td>
-<td>Well formed request received, but we could not find an enrolled user with the supplied id</td>
-<td>Confirm if enrollnment was done for the specific user</td>
-</tr>
-</tbody></table>
-
-<p>Please also see <a href="#errors">#errors</a> for description of standard errors.</p>
+<p>Please see <a href="#errors">#errors</a> for description of errors and formatting.</p>
 
 <h2 id="errors">Errors</h2>
 
@@ -1629,11 +1555,17 @@ Voice token will automatically expire after 5 minutes.
 </blockquote>
 
 <pre class="highlight shell"><code><span class="o">{</span>
-    <span class="s2">"error"</span>:<span class="s2">"Unable to detect face in target image"</span>
+    <span class="s2">"error"</span>:<span class="s2">"User not found"</span>,
+    <span class="s2">"errors"</span>:[
+        <span class="o">{</span>
+            <span class="s2">"description"</span>: <span class="s2">"User not found"</span>,
+            <span class="s2">"code"</span>: 107
+        <span class="o">}</span>
+    <span class="o">]</span>
 <span class="o">}</span>
 </code></pre>
 
-<p>All errors are indicated by returning HTTP code which is NOT 200. Human readable description is returned via body in JSON format.</p>
+<p>All errors are indicated by returning HTTP code which is NOT 200. Human readable description as well as specific code is returned via body in JSON format.</p>
 
 <table><thead>
 <tr>
@@ -1643,11 +1575,35 @@ Voice token will automatically expire after 5 minutes.
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">error</code></td>
-<td><strong>string</strong><br>Human readable error description.</td>
+<td><strong>string</strong><br>Human readable error description of the main error.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">errors</code></td>
+<td><strong>array of objects</strong><br>Array of all errors.</td>
 </tr>
 </tbody></table>
 
-<p>The AimBrain API uses the following error codes:</p>
+<h3 id="errors-object"><code class="prettyprint">errors</code> object</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">description</code></td>
+<td><strong>string</strong><br>Human readable error description of the error.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">code</code></td>
+<td><strong>integer</strong><br>Code of the error (list of possible error codes below).</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-error-codes">HTTP error codes</h3>
+
+<p>The AimBrain API uses the following HTTP error codes in case of main errors:</p>
 
 <table><thead>
 <tr>
@@ -1672,9 +1628,212 @@ Voice token will automatically expire after 5 minutes.
 <td>Generate and include a valid session id and try again</td>
 </tr>
 <tr>
+<td>422</td>
+<td>Well formed request received, but images were not accepted (reason specified in <code class="prettyprint">error</code> field)</td>
+<td>Capture a NEW set of images and try again</td>
+</tr>
+<tr>
+<td>424</td>
+<td>Well formed request received, but we could not find an enrolled user with the supplied id</td>
+<td>Confirm if enrollnment was done for the specific user</td>
+</tr>
+<tr>
+<td>460</td>
+<td>Token for the authentication request was not found</td>
+<td>Confirm if a token endpoint was called before authenticating</td>
+</tr>
+<tr>
 <td>500</td>
 <td>Internal Server Error &ndash; well formed request received, but we had a problem with our server</td>
 <td>Try again later</td>
+</tr>
+</tbody></table>
+
+<h3 id="aimbrain-error-codes">AimBrain error codes</h3>
+
+<p>Further to the HTTP error codes AimBrain also uses custom codes to facilitate the actionable feedback errors:</p>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Action</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>Unable to detect a face in the photo/video</td>
+<td>Retake the photo/video</td>
+</tr>
+<tr>
+<td>2</td>
+<td>No image data in the face field</td>
+<td>Make sure the photo/video data is not corrupted</td>
+</tr>
+<tr>
+<td>3</td>
+<td>No facial points in photo/video</td>
+<td>Retake the photo/video</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Image is blurred due to motion</td>
+<td>Retake the photo/video without shaking the camera</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Face has wrong orientation</td>
+<td>Retake the photo/video upright</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Detected face is far away</td>
+<td>Retake the photo/video while close to the camera</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Image has poor sharpness</td>
+<td>Retake the photo/video in higher focus</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Image has poor contrast</td>
+<td>Retake the photo/video in better lighting conditions</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Image has poor brightness</td>
+<td>Retake the photo/video in better lighting conditions</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Image is blurry</td>
+<td>Retake the photo/video in higher focus</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Timeout processing liveliness</td>
+<td>Make sure the video adheres to required specifications</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Image is malformed</td>
+<td>Make sure the photo is not corrupted</td>
+</tr>
+<tr>
+<td>14</td>
+<td>File received is too big</td>
+<td>Make sure the size of the request is less than 2 MB</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Cannot read voice data</td>
+<td>Make sure the voice recording is not corrupted</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Video and audio clips are of different durations</td>
+<td>Make sure the video is not corrupted</td>
+</tr>
+<tr>
+<td>17</td>
+<td>No media found</td>
+<td>Make sure the video is not corrupted</td>
+</tr>
+<tr>
+<td>18</td>
+<td>No video found</td>
+<td>Make sure the video is not corrupted</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Cannot retrieve audio</td>
+<td>Make sure the video is not corrupted</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Unsupported image type</td>
+<td>Make sure the photo is in a supported format</td>
+</tr>
+<tr>
+<td>103</td>
+<td>No user encodings</td>
+<td>Retry the request later</td>
+</tr>
+<tr>
+<td>104</td>
+<td>User cannot be enrolled</td>
+<td>Retry the request later</td>
+</tr>
+<tr>
+<td>105</td>
+<td>Cannot decode data</td>
+<td>Make sure the request is not malformed</td>
+</tr>
+<tr>
+<td>106</td>
+<td>Cannot decode request body</td>
+<td>Make sure the request is not malformed</td>
+</tr>
+<tr>
+<td>107</td>
+<td>User not found</td>
+<td>Make sure the user is enrolled</td>
+</tr>
+<tr>
+<td>108</td>
+<td>Unsupported MIME type</td>
+<td>Make sure the data is not corrupted</td>
+</tr>
+<tr>
+<td>120</td>
+<td>API error</td>
+<td>Retry the request later</td>
+</tr>
+<tr>
+<td>150</td>
+<td>No faces present in request</td>
+<td>Make sure the face data is present in the request</td>
+</tr>
+<tr>
+<td>151</td>
+<td>No voices present in request</td>
+<td>Make sure the voice data is present in the request</td>
+</tr>
+<tr>
+<td>152</td>
+<td>No token found</td>
+<td>Make sure the token endpoint was called prior to this request</td>
+</tr>
+<tr>
+<td>153</td>
+<td>No models found for the API key</td>
+<td>Please contact AimBrain</td>
+</tr>
+<tr>
+<td>170</td>
+<td>Operation timeout</td>
+<td>Retry the request later</td>
+</tr>
+<tr>
+<td>180</td>
+<td>Unsupported file type</td>
+<td>Make sure the data is not corrupted</td>
+</tr>
+<tr>
+<td>181</td>
+<td>Multiple file types detected</td>
+<td>Make sure the data is not corrupted</td>
+</tr>
+<tr>
+<td>182</td>
+<td>Cannot decode request body</td>
+<td>Make sure the data is not corrupted</td>
+</tr>
+<tr>
+<td>999</td>
+<td>Unknown error</td>
+<td>Retry the request later</td>
 </tr>
 </tbody></table>
 
