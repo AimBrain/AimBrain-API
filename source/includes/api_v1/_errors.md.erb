@@ -4,21 +4,82 @@
 
 ```shell
 {
-    "error":"Unable to detect face in target image"
+    "error":"User not found",
+    "errors":[
+        {
+            "description": "User not found",
+            "code": 107
+        }
+    ]
 }
 ```
 
-All errors are indicated by returning HTTP code which is NOT 200. Human readable description is returned via body in JSON format.
+All errors are indicated by returning HTTP code which is NOT 200. Human readable description as well as specific code is returned via body in JSON format.
 
 Parameter | Description
 -------------------------------|--------------------------------------
-`error` | **string**<br>Human readable error description.
+`error` | **string**<br>Human readable error description of the main error.
+`errors` | **array of objects**<br>Array of all errors.
 
-The AimBrain API uses the following error codes:
+### `errors` object
+
+Parameter | Description
+-------------------------------|--------------------------------------
+`description` | **string**<br>Human readable error description of the error.
+`code` | **integer**<br>Code of the error (list of possible error codes below).
+
+### HTTP error codes
+
+The AimBrain API uses the following HTTP error codes in case of main errors:
 
 Code | Meaning | Action
 ---------- | ---------- | ----------
 400 | Bad Request -- malformed request received (e.g. missing API key, API signature, required parameters or malformed json) | Inspect the error message and fix any errors
 401 | Unauthorized -- your API key or API signature is invalid | Check implementation and try generating a new key pair via dashboard
 403 | Forbidden -- specified session with the id could not be found | Generate and include a valid session id and try again
+422 | Well formed request received, but images were not accepted (reason specified in `error` field) | Capture a NEW set of images and try again
+424 | Well formed request received, but we could not find an enrolled user with the supplied id | Confirm if enrollnment was done for the specific user
+460 | Token for the authentication request was not found | Confirm if a token endpoint was called before authenticating
 500 | Internal Server Error -- well formed request received, but we had a problem with our server | Try again later
+
+### AimBrain error codes
+
+Further to the HTTP error codes AimBrain also uses custom codes to facilitate the actionable feedback errors:
+
+Code | Meaning | Action
+---------- | ---------- | ----------
+1 | Unable to detect a face in the photo/video | Retake the photo/video
+2 | No image data in the face field | Make sure the photo/video data is not corrupted
+3 | No facial points in photo/video | Retake the photo/video
+5 | Image is blurred due to motion | Retake the photo/video without shaking the camera
+6 | Face has wrong orientation | Retake the photo/video upright
+7 | Detected face is far away | Retake the photo/video while close to the camera
+8 | Image has poor sharpness | Retake the photo/video in higher focus
+9 | Image has poor contrast | Retake the photo/video in better lighting conditions
+10 | Image has poor brightness | Retake the photo/video in better lighting conditions
+11 | Image is blurry | Retake the photo/video in higher focus
+12 | Timeout processing liveliness | Make sure the video adheres to required specifications
+13 | Image is malformed | Make sure the photo is not corrupted
+14 | File received is too big | Make sure the size of the request is less than 2 MB
+15 | Cannot read voice data | Make sure the voice recording is not corrupted
+16 | Video and audio clips are of different durations | Make sure the video is not corrupted
+17 | No media found | Make sure the video is not corrupted
+18 | No video found | Make sure the video is not corrupted
+19 | Cannot retrieve audio | Make sure the video is not corrupted
+20 | Unsupported image type | Make sure the photo is in a supported format
+103 | No user encodings | Retry the request later
+104 | User cannot be enrolled | Retry the request later
+105 | Cannot decode data | Make sure the request is not malformed
+106 | Cannot decode request body | Make sure the request is not malformed
+107 | User not found | Make sure the user is enrolled
+108 | Unsupported MIME type | Make sure the data is not corrupted
+120 | API error | Retry the request later
+150 | No faces present in request | Make sure the face data is present in the request
+151 | No voices present in request | Make sure the voice data is present in the request
+152 | No token found | Make sure the token endpoint was called prior to this request
+153 | No models found for the API key | Please contact AimBrain
+170 | Operation timeout | Retry the request later
+180 | Unsupported file type | Make sure the data is not corrupted
+181 | Multiple file types detected | Make sure the data is not corrupted
+182 | Cannot decode request body | Make sure the data is not corrupted
+999 | Unknown error | Retry the request later

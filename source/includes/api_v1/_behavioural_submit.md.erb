@@ -1,0 +1,17 @@
+## /v1/behavioural/submit
+
+This endpoint sends behavioural data to the AimBrain backend to be used for the AimAnomaly score with the [/v1/score](#v1-score) call.
+
+### HTTP Request
+`POST /v1/behavioural/submit`
+
+### Body
+
+The data collection for AimAnomaly is facilitated by the SDKs and is application dependent. Data such as touch/type events, swipe/mouse movement events and accelerometer readings is gathered and sent.
+
+### HTTP Response
+Status code: `200 OK`
+
+### Errors
+
+Please see [#errors](#errors) for description of errors and formatting.

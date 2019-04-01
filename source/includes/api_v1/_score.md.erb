@@ -1,34 +1,57 @@
 ## /v1/score
 
-REQUEST
-POST  /v1/score
 
-Headers:
-Content-Type "application/json"
-X-aimbrain-apikey <apiKey>
-X-aimbrain-signature <HMAC>
+> Example response:
 
-BODY
+```shell
 {
-"session": <session>
+    "session":"test-session",
+    "metadata":[],
+    "scores":[
+        {
+            "version":"1.0.0",
+            "type":"test-model",
+            "value":1.0
+        }
+    ]
 }
-RESPONSE 200
-Ok
-BODY
-{
-status: <learning status: (int) 0-learned 1-learning>
-score: <score (float) if learned>
-}
+```
 
-RESPONSE 404
-invalid session
-BODY
-{
-"error": <human readable error message>
-}
-RESPONSE 401
-invalid apiKey
-BODY
-{
-"error": <human readable error message>
-}
+This endpoint returns the AimAnomaly score for the session.
+
+### HTTP Request
+`POST /v1/score`
+
+### Body
+
+Parameter | Description
+------------------------------|--------------------------------------
+`session`<br><span class="label notice">required</span>|**string**<br>Current Session ID.
+
+### HTTP Response
+Status code: `200 OK`
+
+Parameter | Description
+------------------------------|--------------------------------------
+`session`|**string**<br>Current Session ID.
+`metadata`|**array of objects**<br>Metadata associated with the session.
+`scores`|**array of objects**<br>Scores associated with the session.
+
+### `metadata` object:
+
+Parameter | Description
+------------------------------|--------------------------------------
+`name`|**string**<br>Name of the metadata object (application specific).
+`value`|**string**<br>Value of the metadata object (application specific).
+
+### `scores` object:
+
+Parameter | Description
+------------------------------|--------------------------------------
+`version`|**string**<br>Version of the scoring process used for this score object.
+`type`|**string**<br>Type of the scoring process used for this score object.
+`value`|**float**<br>Score returned by the scoring process in the range [0..1].
+
+### Errors
+
+Please see [#errors](#errors) for description of errors and formatting.

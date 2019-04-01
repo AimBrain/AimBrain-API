@@ -57,10 +57,6 @@ Parameter | Description
 `liveliness1`|**float**<br>Probability, expressed as float between (0..1), that the received video in `faces1` array represent a live person as opposed being still image. In case of images are sent in `faces1`, 0.0 is returned.
 `liveliness2`|**float**<br>Probability, expressed as float between (0..1), that the received video in `faces2` array represent a live person as opposed being still image. In case of images are sent in `faces2`, 0.0 is returned.
 
-### Custom Errors
+### Errors
 
-Code | Meaning | Action
----------- | ---------- | ----------
-422 | Well formed request received, but images were not accepted (reason specified in `error` field) | Capture a NEW set of images and try again
-
-Please also see [#errors](#errors) for description of standard errors.
+Please see [#errors](#errors) for description of errors and formatting.

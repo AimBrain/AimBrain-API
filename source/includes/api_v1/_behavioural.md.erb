@@ -1,22 +1,5 @@
 ## /v1/behavioural
 
-> Download [behavioural_request_example_body.json](examples/api_v1/behavioural_request_example_body.json) and use:
-
-```shell
-python2 curl_hmac.py test secret POST /v1/behavioural \
-    -f 'behavioural_request_example_body.json' -r
-```
-
-> Alternatively:
-
-```shell
-curl https://api.aimbrain.com:443/v1/behavioural \
-    -H 'Content-Type: application/json' \
-    -H 'X-aimbrain-apikey: test' \
-    -H 'X-aimbrain-signature: TgDm+IwKlW3H3ILdB3ga0OOZGgZab4gM/9nW+X4NSHw=' \
-    --data @behavioural_request_example_body.json
-```
-
 > Example response:
 
 ```shell
@@ -33,48 +16,7 @@ This endpoint enrolls and authenticates users based on the AimBehaviour Module.
 
 ### Body
 
-Parameter | Description
-------------------------------|--------------------------------------
-`session`<br><span class="label notice">required</span>|**string**<br>Current Session ID as returned by [/v1/sessions](#v1-sessions) request.
-`touches`<br><span class="label notice">required</span>|**array of objects**<br>List of touch events (see below).
-`accelerations`<br><span class="label notice">required</span>|**array of objects**<br>List of accelerometer events (see below).
-`textEvents`<br><span class="label notice">required</span>|**array of objects**<br>List of text change / typing events (see below).
-
-### `touches` object:
-
-Parameter | Description
-------------------------------|--------------------------------------
-`tid`<br><span class="label notice">required</span>|**integer**<br>Touch id as reported by the system (e.g. [MotionEvent.getPointerId(int)](https://developer.android.com/reference/android/view/MotionEvent.html#getPointerId(int))) for Android
-`p`<br><span class="label notice">required</span>|**integer**<br>Phase or action for the touch event, where: `0` - Began, `1` - Moved, `2` - Stationary, `3` - Ended, `4` - Cancelled.
-`t`<br><span class="label notice">required</span>|**integer**<br>The the time (in ms) when this specific event was generated.
-`x`<br><span class="label notice">required</span>|**integer**<br>Absolute X coordinate for the touch position (for elements tagged as sensitive MUST be reported as “0”).
-`y`<br><span class="label notice">required</span>|**integer**<br>Absolute X coordinate for the touch position (for elements tagged as sensitive MUST be reported as “0”).
-`rx`<br><span class="label notice">required</span>|**integer**<br>Relative X coordinate to the event element (e.g. button).
-`ry`<br><span class="label notice">required</span>|**integer**<br>Relative Y coordinate to the event element (e.g. button).
-`r`<br><span class="label notice">required</span>|**float**<br>Approximate size of touch area for the given touch id.
-`f`<br><span class="label notice">required</span>|**float**<br>Force of pressure of touch for the given event.
-`ids`<br><span class="label notice">required</span>|**array of strings**<br>List of identifiers of views in the order that touch event is propagating (for elements tagged as sensitive it MUST be reported as a hash of element id + locally generated salt which never leaves the user’s device).
-
-### `accelerations` object:
-
-Parameter | Description
-------------------------------|--------------------------------------
-`t`<br><span class="label notice">required</span>|**integer**<br>The the time (in ms) when this specific event was generated.
-`x`<br><span class="label notice">required</span>|**float**<br>Acceleration in X direction.
-`y`<br><span class="label notice">required</span>|**float**<br>Acceleration in Y direction.
-`z`<br><span class="label notice">required</span>|**float**<br>Acceleration in Z direction.
-
-<aside class="notice">
-Accelerometer readings MUST be sampled at around 100Hz frequency and for at least 500ms after the last observed touch event.
-</aside>
-
-### `textEvents` object:
-
-Parameter | Description
-------------------------------|--------------------------------------
-`t`<br><span class="label notice">required</span>|**integer**<br>The the time (in ms) when this specific event was generated.
-`tx`<br><span class="label notice">required</span>|**string**<br>Full text after the event / change.
-`ids`<br><span class="label notice">required</span>|**array of strings**<br>List of identifiers of views in the order that touch event is propagating (for elements tagged as sensitive it MUST be reported as a hash of element id + locally generated salt which never leaves the user’s device).
+The data collection for AimBehaviour is facilitated by the SDKs and is application dependent. Data such as touch/type events, swipe/mouse movement events and accelerometer readings is gathered and sent.
 
 ### HTTP Response
 Status code: `200 OK`
@@ -92,6 +34,6 @@ Parameter | Description
 The Behavioural Module starts in listen only mode. When integrated with new applications the endpoint will return score and status as 0.0 and 0 respectively until a sufficient number of interactions is reached.
 </aside>
 
-### Custom Errors
+### Errors
 
-No custom errors. Please see [#errors](#errors) for description of standard errors.
+Please see [#errors](#errors) for description of errors and formatting.

@@ -31,7 +31,7 @@ curl https://api.aimbrain.com:443/v1/sessions \
 This endpoint creates a server-side session and returns unique session id to be used with further API requests.
 
 <aside class="notice">
-Session ID will automatically expire after 24 hours of the last API request associated with that session.
+Session ID will automatically expire after 2 hours of the last API request associated with that session.
 </aside>
 
 ### HTTP Request
@@ -69,6 +69,6 @@ Parameter | Description
 
 <%= partial "includes/api_v1/behavioural_module_states" %>
 
-### Custom Errors
+### Errors
 
-No custom errors. Please see [#errors](#errors) for description of standard errors.
+Please see [#errors](#errors) for description of errors and formatting.
