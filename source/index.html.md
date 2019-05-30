@@ -17,7 +17,6 @@ includes:
   - modules
   - security
   - api_v1
-  - authenticator
 
 search: true
 ---
